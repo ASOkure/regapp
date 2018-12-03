@@ -1,0 +1,73 @@
+<validators>
+    <field name="portalUser.username">
+        <field-validator type="requiredstring">
+            <message>You must enter a username</message>
+        </field-validator>
+        <field-validator type="stringlength">
+            <param name="maxLength">30</param>
+            <param name="minLength">6</param>
+            <param name="trim">true</param>
+            <message><![CDATA[ Length of portal user name must be between 6 and 30 ]]></message>
+        </field-validator>
+    </field>
+    <field name="portalUser.password">
+        <field-validator type="requiredstring">
+            <message>You must enter a password</message>
+        </field-validator>
+        <field-validator type="stringlength">
+            <param name="maxLength">30</param>
+            <param name="minLength">6</param>
+            <param name="trim">true</param>
+            <message><![CDATA[ Length of portal user password must be between 6 and 30 ]]></message>
+        </field-validator>
+    </field>
+    <field name="repassword">
+        <field-validator type="requiredstring">
+            <message>You must enter the password twice</message>
+        </field-validator>
+        <field-validator type="stringlength">
+            <param name="maxLength">30</param>
+            <param name="minLength">6</param>
+            <param name="trim">true</param>
+            <message><![CDATA[ Length of portal user password must be between 6 and 30 ]]></message>
+        </field-validator>
+    </field>
+    <field name="portalUser.name">
+        <field-validator type="requiredstring">
+            <message>You must enter a name</message>
+        </field-validator>
+        <field-validator type="stringlength">
+            <param name="maxLength">30</param>
+            <param name="minLength">6</param>
+            <param name="trim">true</param>
+            <message><![CDATA[ Length of portal user full name must be between 6 and 30 ]]></message>
+        </field-validator>
+    </field>
+    <field name="portalUser.centre">
+        <field-validator type="requiredstring">
+            <message>You must enter a centre name</message>
+        </field-validator>
+        <field-validator type="stringlength">
+            <param name="maxLength">30</param>
+            <param name="minLength">2</param>
+            <param name="trim">true</param>
+            <message><![CDATA[ Length of portalUser name must be between 2 and 30 ]]></message>
+        </field-validator>
+    </field>
+    <field name="portalUser.country">
+        <field-validator type="requiredstring">
+            <message>You must enter a username</message>
+        </field-validator>
+        <field-validator type="stringlength">
+            <param name="maxLength">30</param>
+            <param name="minLength">2</param>
+            <param name="trim">true</param>
+            <message><![CDATA[ Length of portalUser name must be between 2 and 30 ]]></message>
+        </field-validator>
+    </field>
+    <field name="portalUser.email">
+        <field-validator type="email">
+            <message><![CDATA[ must be a valid email if supplied ]]></message>
+        </field-validator>
+    </field>
+</validators>

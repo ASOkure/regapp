@@ -1,0 +1,177 @@
+@CHARSET "ISO-8859-1";
+
+table.identifier_table {
+  padding: auto;
+  margin: auto;
+  width: 1000px;
+  /*border: 1px solid green;*/
+  text-align: centre;
+}
+
+.identifier_table tr {
+
+}
+
+.identifier_table td {
+  /*border: 1px solid black;*/
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.identifier_table tr td select {
+  border: 1px solid #898989;
+  background: white;
+  height: 26px;
+  padding: 2px;
+  margin: 2px;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
+.identifier_table tr td input {
+  border: 1px solid #898989;
+  background: white;
+  height: 26px;
+  padding: 2px;
+  margin: 2px;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
+td.field_name {
+  font-weight: bold;
+}
+
+div.section_nav_tab {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  padding-bottom: 20px;
+}
+
+/*globalnav*/
+#globalnav {
+  position: relative;
+  float: left;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  line-height: 1em;
+}
+
+#globalnav LI {
+  float: left;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+#globalnav A {
+  display: block;
+  color: #444;
+  text-decoration: none;
+  font-weight: bold;
+  background: #ddd;
+  margin: 0;
+  padding: 0.25em 1em;
+  border-left: 1px solid #fff;
+  border-top: 1px solid #fff;
+  border-right: 1px solid #aaa;
+}
+
+#globalnav A:hover, #globalnav A:active, #globalnav A.here:link, #globalnav A.here:visited {
+  background: #bbb;
+}
+
+#globalnav A.here:link, #globalnav A.here:visited {
+  position: relative;
+  z-index: 102;
+}
+
+/*subnav*/
+#globalnav UL {
+  position: absolute;
+  left: 0;
+  top: 1.5em;
+  float: left;
+  background: #bbb;
+  width: 100%;
+  margin: 0;
+  padding: 0.25em 0.25em 0.25em 1em;
+  list-style: none;
+  border-top: 1px solid #fff;
+}
+
+#globalnav UL LI {
+  float: left;
+  display: block;
+  margin-top: 1px;
+}
+
+#globalnav UL A {
+  background: #bbb;
+  color: #fff;
+  display: inline;
+  margin: 0;
+  padding: 0 1em;
+  border: 0
+}
+
+#globalnav UL A:hover, #globalnav UL A:active, #globalnav UL A.here:link, #globalnav UL A.here:visited {
+  color: #444;
+}
+
+/**
+* YUI tooltip css
+**/
+.yui3-tooltip {
+  position: absolute;
+}
+
+.yui3-tooltip-content {
+  color: #000;
+  padding: 2px 5px;
+  border-color: #D4C237 #A6982B #A6982B #A6982B;
+  border-width: 1px;
+  border-style: solid;
+  background-color: #FFEE69;
+}
+
+.yui3-tooltip-hidden {
+  visibility: hidden;
+}
+
+div.yui3-hastooltip {
+  float: left;
+  width: 18px;
+  margin: 0;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 0;
+  cursor: default;
+}
+
+div.yui3-hastooltip span {
+  font-style: italic;
+  font-weight: bold;
+  color: #ABCEFF;
+}
+
+.yui3-tooltip-content strong {
+  font-weight: bold;
+}
+
+div.gene_analysis_field_div {
+  clear: both;
+}
+
+.gene_analysis_tooltip_td {
+  border-bottom: 0;
+}
+
+td.tooltip_td {
+  width: 30px;
+}

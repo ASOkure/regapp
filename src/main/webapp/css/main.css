@@ -1,0 +1,27 @@
+@CHARSET "ISO-8859-1";
+
+@import url(./default.css);
+@import url(./common.css);
+@import url(./navigation.css);
+@import url(./query.css);
+@import url(./index.css);
+@import url(./validation.css);
+@import url(./home.css);
+@import url(./multiple_submission.css);
+@import url(./feedback.css);
+@import url(./error.css);
+@import url(./yui_menu.css);
+@import url(./new.css);
+@import url(./yui_panel.css);
+@import url(./participant.css);
+
+/*
+@import url( vlaCal-v2.1.css );
+
+@import url( datePicker.css );
+
+@import url( user_register.css );
+
+@import url( dhtmlwindow.css );
+
+*/

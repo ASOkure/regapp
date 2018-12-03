@@ -1,0 +1,24 @@
+<validators>
+    <field name="password">
+        <field-validator type="requiredstring">
+            <message>You must enter a password</message>
+        </field-validator>
+        <field-validator type="stringlength">
+            <param name="maxLength">16</param>
+            <param name="minLength">8</param>
+            <param name="trim">true</param>
+            <message><![CDATA[ Length of patient user password must be between 8 and 18 ]]></message>
+        </field-validator>
+    </field>
+    <field name="repassword">
+        <field-validator type="requiredstring">
+            <message>You must enter the password twice</message>
+        </field-validator>
+        <field-validator type="stringlength">
+            <param name="maxLength">18</param>
+            <param name="minLength">8</param>
+            <param name="trim">true</param>
+            <message><![CDATA[ Length of patient user password must be between 8 and 18 ]]></message>
+        </field-validator>
+    </field>
+</validators>

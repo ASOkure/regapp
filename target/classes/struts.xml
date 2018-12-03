@@ -1,0 +1,1351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+
+  <constant name="struts.devMode" value="false"/>
+  <constant name="struts.objectFactory" value="spring" />
+  <constant name="struts.mapper.action.prefix.enabled" value="true" />
+  <constant name="struts.locale" value="en_GB"/>
+
+  <!-- constant name="struts.multipart.saveDir" value="/home/portal/idsd_upload_files/temp" /-->
+  <!-- <constant name="struts.enable.DynamicMethodInvocation" value="true" /> -->
+  <package name="idsd_default" extends="struts-default,json-default">
+
+    <interceptors>
+      <interceptor name="redirectMessage" class="uk.ac.nesc.idsd.util.RedirectMessageInterceptor" />
+      <interceptor-stack name="myStack">
+        <interceptor-ref name="redirectMessage" />
+        <interceptor-ref name="paramsPrepareParamsStack" />
+      </interceptor-stack>
+    </interceptors>
+
+    <default-interceptor-ref name="myStack" />
+
+    <!-- GENERAL PURPOSE CANCEL ACTION, RETURN TO HOME PAGE -->
+    <action name="cancel">
+      <result>/jsp/home.jsp</result>
+    </action>
+
+    <action name="register_view" class="UserRegisterBean" method="registerUserView">
+      <result>/register.jsp</result>
+      <result name="input">/register.jsp</result>
+      <result name="error">/reg_no_email.jsp</result>
+    </action>
+
+    <action name="register" class="UserRegisterBean" method="registerUser">
+      <result>/reg_success.jsp</result>
+      <result name="input">/register.jsp</result>
+      <result name="error">/reg_no_email.jsp</result>
+    </action>
+
+    <!-- DATA STATISTIC ACTION -->
+    <action name="record_statistic" class="RecordStatisticBean" method="getStatisticJSONData">
+      <result type="json" />
+    </action>
+
+    <action name="total_number" class="TotalRecrodNumberBean" method="getTotalNubmerJSONData">
+      <result type="json" />
+    </action>
+
+    <action name="logout">
+      <result>/j_spring_security_logout</result>
+    </action>
+
+  </package>
+
+  <package name="idsd_search" namespace="/search" extends="idsd_default">
+    <action name="searchview" class="searchDsdBean" method="searchView">
+      <result>/jsp/search/view.jsp</result>
+      <result name="input">/jsp/search/view.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="search" class="searchDsdBean" method="search">
+      <result>/jsp/search/result.jsp</result>
+      <result name="input">/jsp/search/view.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="search_request" class="searchDsdRequestBean" method="searchView">
+      <result>/jsp/search/search_request_view.jsp</result>
+      <result name="input">/jsp/search/search_request_view.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="search_request_submit" class="searchDsdRequestBean" method="searchSubmit">
+      <result>/jsp/search/search_request_success.jsp</result>
+      <result name="input">/jsp/search/search_request_view.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="view_search_request" class="searchDsdRequestBean" method="viewSearchRequest">
+      <result>/jsp/search/search_request_display.jsp</result>
+      <result name="input">/jsp/search/search_request_display.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="view_search_request_result" class="searchDsdRequestBean" method="viewSearchRequestResult">
+      <result>/jsp/search/search_request_result.jsp</result>
+      <result type="redirectAction" name="input">
+        <param name="actionName">view_search_request</param>
+        <param name="searchId">${searchId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="save_search_request_result" class="searchDsdRequestBean" method="saveSearchRequestResult">
+      <result name="success" type="stream">
+        <param name="inputName">fileInputStream</param>
+        <param name="contentDisposition">attachment;fileName=${fileName}</param>
+        <param name="bufferSize">2048</param>
+      </result>
+      <result type="redirectAction" name="input">
+        <param name="actionName">view_search_request</param>
+        <param name="searchId">${searchId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="search_my_centre_view" class="searchMyCentreDsdRecordsBean" method="searchMyCentreView">
+      <result>/jsp/search/search_my_centre_view.jsp</result>
+      <result name="input">/jsp/search/view.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="search_my_centre" class="searchMyCentreDsdRecordsBean" method="searchMyCentreRecords">
+      <result>/jsp/search/result.jsp</result>
+      <result name="input">/jsp/search/search_my_centre_view.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="view_my_records" class="searchDsdBean" method="viewMyRecords">
+      <result>/jsp/search/my_records.jsp</result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="view_my_centre_records" class="searchDsdBean" method="viewMyCentreRecords">
+      <result>/jsp/search/my_centre_records.jsp</result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="read" class="readDsdBean" method="readDsdRecord">
+      <result>/jsp/read/read.jsp</result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="read_cah_visit" class="readDsdBean" method="readDsdCahVisitRecord">
+      <result>/jsp/read/read_cah_visit.jsp</result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="refer_patient_view" class="referPatientBean" method="referPatientView">
+      <result>/jsp/search/refer_patient_view.jsp</result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="refer_patient" class="referPatientBean" method="referPatient">
+      <result type="redirectAction">
+        <param name="actionName">refer_patient_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="patientEmail">${patientEmail}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="refer_patient_success">
+      <result>/jsp/search/refer_patient_success.jsp</result>
+    </action>
+
+    <action name="view_centre" class="editCentreBean" method="viewCentre">
+      <result>/jsp/search/edit_centre.jsp</result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="save_centre" class="editCentreBean" method="saveCentre">
+      <result type="redirectAction">
+        <param name="actionName">refer_patient_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="patientEmail">${patientEmail}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+  </package>
+
+  <package name="idsd_create" namespace="/create" extends="idsd_default">
+    <!-- CREATE DSD RECORD in multiple steps -->
+    <!-- CREATE VIEW -->
+    <action name="core_view" class="createDsdCoreBean" method="createDsdIdentifierView">
+      <result>/jsp/create/create_core.jsp</result>
+      <result name="input">/jsp/create/create_core.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- CREATE DSD IDENTIFIER -->
+    <action name="save_core" class="createDsdCoreBean" method="createDsdIdentifier">
+      <result type="redirectAction">
+        <param name="actionName">create_core_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="save" type="redirectAction">
+        <param name="actionName">create_core_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">core_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="create_core_success">
+      <result>/jsp/create/create_core_success.jsp</result>
+    </action>
+
+    <action name="clinical_view" class="editDsdClinicalBean" method="editClinicalHistoryAndBiomaterialsView">
+      <result>/jsp/create/create_diagnosis.jsp</result>
+      <result name="input">/jsp/create/create_diagnosis.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="save_clinical" class="editDsdClinicalBean" method="editClinicalHistoryAndBiomaterials">
+      <result type="redirectAction">
+        <param name="actionName">create_clinical_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="save" type="redirectAction">
+        <param name="actionName">create_clinical_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">clinical_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="create_clinical_success">
+      <result>/jsp/create/create_diagnosis_success.jsp</result>
+    </action>
+
+    <!-- CREATE DSD ASSESSMENTS VIEW -->
+    <action name="assessment_view" class="createDsdAssessmentBean" method="assessmentView">
+      <result>/jsp/update/assessment.jsp</result>
+      <result name="input">/jsp/update/assessment.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- ADD A DSD ASSESSMENT -->
+    <action name="add_assessment" class="createDsdAssessmentBean" method="addAssessment">
+      <result type="redirectAction">
+        <param name="actionName">assessment_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">assessment_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- REMOVE A DSD ASSESSMENT -->
+    <action name="remove_assessment" class="createDsdAssessmentBean" method="removeAssessment">
+      <result type="redirectAction">
+        <param name="actionName">assessment_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">assessment_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- EDIT A DSD ASSESSMENT -->
+    <action name="edit_assessment" class="createDsdAssessmentBean" method="editAssessment">
+      <result type="redirectAction">
+        <param name="actionName">assessment_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="assessmentId">${assessmentId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">assessment_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="assessmentId">${assessmentId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- SUBMIT A SET OF ASSESSMENTS -->
+    <action name="submit_assessment" class="createDsdAssessmentBean" method="submitAssessment">
+      <result type="redirectAction">
+        <param name="actionName">submit_assessment_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="save" type="redirectAction">
+        <param name="actionName">submit_assessment_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">assessment_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="submit_assessment_success">
+      <result>/jsp/update/assessment_success.jsp</result>
+    </action>
+
+    <!-- GENE ANALYSIS VIEW -->
+    <action name="gene_analysis_view" class="createDsdGeneAnalysisBean" method="addDsdGeneAnalysisView">
+      <result>/jsp/create/create_gene_analysis.jsp</result>
+      <result name="input">/jsp/create/create_gene_analysis.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- SUBMIT GENE ANALYSIS DATA -->
+    <action name="save_gene_analysis" class="createDsdGeneAnalysisBean" method="addDsdGeneAnalysis">
+      <result type="redirectAction">
+        <param name="actionName">create_gene_analysis_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="save" type="redirectAction">
+        <param name="actionName">create_gene_analysis_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">gene_analysis_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="create_gene_analysis_success">
+      <result>/jsp/create/create_gene_analysis_success.jsp</result>
+    </action>
+
+    <!-- Create CAH record -->
+    <action name="cah_view" class="editDsdCahBean" method="editCahView">
+      <result>/jsp/update/cah.jsp</result>
+      <result name="input">/jsp/update/cah.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="save_cah" class="editDsdCahBean" method="editCah">
+      <result type="redirectAction">
+        <param name="actionName">create_cah_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="save" type="redirectAction">
+        <param name="actionName">create_cah_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+<!--  sam added below for DSD on tabs page  -->
+
+    <action name="dsdlong_view" class="editDsdCahBean" method="editCahView">
+      <result>/jsp/update/dsdlong.jsp</result>
+      <result name="input">/jsp/update/dsdlong.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+<!--  sam added below for DsdNeonatal module -->
+    <action name="save_neonatal_visit" class="editDsdNeonatalBean" method="execute">
+      <result type="redirectAction">
+        <param name="actionName">create_cah_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="save" type="redirectAction">
+        <param name="actionName">create_cah_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+<!--  sam end above here for DSDlong module -->
+
+
+    <action name="create_cah_success">
+      <result>/jsp/update/cah_success.jsp</result>
+    </action>
+
+    <action name="save_cah_visit" class="editDsdCahBean" method="editCahVisit">
+      <result type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="save" type="redirectAction">
+        <param name="actionName">create_cah_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="clear_cah_visit" class="editDsdCahBean" method="clearCurrentCahVisit">
+      <result type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+        <param name="dsdCahVisitId">${dsdCahVisitId}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+        <param name="dsdCahVisitId">${dsdCahVisitId}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="edit_cah_visit" class="editDsdCahBean" method="editDsdCahVisitEdit">
+      <result type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="dsdCahVisitId">${dsdCahVisitId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="dsdCahVisitId">${dsdCahVisitId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- UPDATE DSD ASSESSMENTS DELETE ONE ASSESSMENT -->
+    <action name="remove_cah_visit" class="editDsdCahBean" method="editDsdCahVisitDelete">
+      <result type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- UPDATE DSD CAH VISIT EDIT-->
+    <action name="read_cah_visit" class="editDsdCahBean" method="editCahVisitView">
+      <result>/jsp/update/cah_visit_view.jsp</result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="dsdCahVisitId">${dsdCahVisitId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- UPDATE DSD ASSESSMENTS SUBMIT NEW ASSESSMENTS -->
+    <action name="submit_cah_visit" class="editDsdCahBean" method="editDsdCahVisitSubmit">
+      <result type="redirectAction">
+        <param name="actionName">create_cah_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="save" type="redirectAction">
+        <param name="actionName">create_cah_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- END OF CREATE DSD RECORD -->
+  </package>
+
+  <package name="idsd_update" namespace="/update" extends="idsd_default">
+    <!-- EDIT/UPDATE A RECORD -->
+    <!-- EIDT VIEW -->
+    <action name="core_view" class="editDsdCoreBean" method="editDsdRecordView">
+      <result>/jsp/update/core.jsp</result>
+      <result name="input">/jsp/update/core.jsp</result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- UPDATE DSD IDENTIFIER -->
+    <action name="save_core" class="editDsdCoreBean" method="editRecordIdentifier">
+      <result type="redirectAction">
+        <param name="actionName">update_core_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="save" type="redirectAction">
+        <param name="actionName">update_core_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">core_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+
+    <action name="update_core_success">
+      <result>/jsp/update/core_success.jsp</result>
+    </action>
+
+    <!-- UPDATE DSD DIAGNOSIS -->
+    <action name="clinical_view" class="editDsdClinicalBean" method="editClinicalHistoryAndBiomaterialsView">
+      <result>/jsp/update/diagnosis.jsp</result>
+      <result name="input">/jsp/update/core.jsp</result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="save_clinical" class="editDsdClinicalBean" method="editClinicalHistoryAndBiomaterials">
+      <result type="redirectAction">
+        <param name="actionName">update_clinical_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="save" type="redirectAction">
+        <param name="actionName">update_clinical_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">clinical_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="update_clinical_success">
+      <result>/jsp/update/diagnosis_success.jsp</result>
+    </action>
+
+    <!-- UPDATE DSD ASSESSMENTS VIEW -->
+    <action name="assessment_view" class="editDsdAssessmentBean" method="editAssessmentView">
+      <result>/jsp/update/assessment.jsp</result>
+      <result name="input">/jsp/update/assessment.jsp</result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- UPDATE DSD ASSESSMENTS ADD ONE ASSESSMENT -->
+    <action name="add_assessment" class="editDsdAssessmentBean" method="editAssessmentAdd">
+      <result type="redirectAction">
+        <param name="actionName">assessment_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">assessment_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- UPDATE DSD ASSESSEMTNS EDIT ONE ASSESSMENT -->
+    <action name="edit_assessment" class="editDsdAssessmentBean" method="editAssessmentEdit">
+      <result type="redirectAction">
+        <param name="actionName">assessment_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="assessmentId">${assessmentId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">assessment_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="assessmentId">${assessmentId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- UPDATE DSD ASSESSMENTS DELETE ONE ASSESSMENT -->
+    <action name="remove_assessment" class="editDsdAssessmentBean" method="editAssessmentDelete">
+      <result type="redirectAction">
+        <param name="actionName">assessment_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">assessment_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- UPDATE DSD ASSESSMENTS SUBMIT NEW ASSESSMENTS -->
+    <action name="submit_assessment" class="editDsdAssessmentBean" method="editAssessmentSubmit">
+      <result type="redirectAction">
+        <param name="actionName">update_assessment_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="save" type="redirectAction">
+        <param name="actionName">update_assessment_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">assessment_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="update_assessment_success">
+      <result>/jsp/update/assessment_success.jsp</result>
+    </action>
+
+    <!-- UPDATE DSD GENE ANALYSIS VIEW -->
+    <action name="gene_analysis_view" class="editDsdGeneAnalysisBean" method="editGeneAnalysisView">
+      <result>/jsp/update/gene_analysis.jsp</result>
+      <result name="input">/jsp/update/assessment.jsp</result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- UPDATE DSD GENE ANALYSIS SUBMIT -->
+    <action name="save_gene_analysis" class="editDsdGeneAnalysisBean" method="editGeneAnalysisSubmit">
+      <result type="redirectAction">
+        <param name="actionName">update_gene_analysis_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="save" type="redirectAction">
+        <param name="actionName">update_gene_analysis_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">gene_analysis_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="update_gene_analysis_success">
+      <result>/jsp/update/gene_analysis_success.jsp</result>
+    </action>
+
+    <!-- UPDATE DSD DIAGNOSIS -->
+    <action name="cah_view" class="editDsdCahBean" method="editCahView">
+      <result>/jsp/update/cah.jsp</result>
+      <result name="input">/jsp/update/cah.jsp</result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="save_cah" class="editDsdCahBean" method="editCah">
+      <result type="redirectAction">
+        <param name="actionName">update_cah_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="save" type="redirectAction">
+        <param name="actionName">update_cah_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="update_cah_success">
+      <result>/jsp/update/cah_success.jsp</result>
+    </action>
+
+    <action name="save_cah_visit" class="editDsdCahBean" method="editCahVisit">
+      <result type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="save" type="redirectAction">
+        <param name="actionName">update_cah_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+        <param name="dsdCahVisitId">${dsdCahVisitId}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+        <param name="dsdCahVisitId">${dsdCahVisitId}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="clear_cah_visit" class="editDsdCahBean" method="clearCurrentCahVisit">
+      <result type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+        <param name="dsdCahVisitId">${dsdCahVisitId}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+        <param name="dsdCahVisitId">${dsdCahVisitId}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+    
+    
+    <!-- dsdNeonatalModule -->
+    
+     <action name="dsdlong_view" class="editDsdCahBean" method="editCahView">
+      <result>/jsp/update/dsdlong.jsp</result>
+      <result name="input">/jsp/update/cah.jsp</result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+    
+    
+   
+    
+    
+    
+
+    <!-- UPDATE DSD CAH VISIT EDIT-->
+    <action name="edit_cah_visit" class="editDsdCahBean" method="editDsdCahVisitEdit">
+      <result type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="dsdCahVisitId">${dsdCahVisitId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="dsdCahVisitId">${dsdCahVisitId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- UPDATE DSD ASSESSMENTS DELETE ONE ASSESSMENT -->
+    <action name="remove_cah_visit" class="editDsdCahBean" method="editDsdCahVisitDelete">
+      <result type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- UPDATE CAH SUBMIT NEW CAH VISIT -->
+    <action name="submit_cah_visit" class="editDsdCahBean" method="editDsdCahVisitSubmit">
+      <result type="redirectAction">
+        <param name="actionName">update_cah_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="save" type="redirectAction">
+        <param name="actionName">update_cah_success</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">cah_view</param>
+        <param name="registerId">${registerId}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="last_cah_visit" class="editDsdCahBean" method="retrieveLastDsdCahVisit">
+      <result type="json"/>
+    </action>
+
+    <!-- END OF UPDATE/EDIT ACTIONS -->
+  </package>
+
+  <package name="idsd_delete" namespace="/delete" extends="idsd_default">
+    <!-- DELETE ACTIONS -->
+    <!-- VIEW THE FULL DETAILS OF THE DELETING RECORD -->
+    <action name="delete" class="deleteDsdBean" method="delete">
+      <result>/jsp/delete/confirm.jsp</result>
+      <result name="input">/jsp/delete/view.jsp</result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/delete_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <!-- PHYSICALLY REMOVE ONE RECORD FROM DB -->
+    <action name="delete_confirm" class="deleteConfirmBean" method="deleteConfirm">
+      <result>/jsp/delete/success.jsp</result>
+      <result name="input">/jsp/delete/confirm.jsp</result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/delete_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+  </package>
+
+  <package name="idsd_user" namespace="/user/search" extends="idsd_default">
+
+    <action name="search_view" class="UserSearchBean" method="searchView">
+      <result>/jsp/user/search/search_view.jsp</result>
+      <result name="input">/jsp/user/search/search_view.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="search_user" class="UserSearchBean" method="searchUsers">
+      <result>/jsp/user/search/search_result.jsp</result>
+      <result name="input">/jsp/user/search/search_view.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="user_detail" class="UserSearchBean" method="userDetail">
+      <result>/jsp/user/search/user_detail.jsp</result>
+      <result name="input">/jsp/user/search/search_view.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+  </package>
+
+  <package name="idsd_user_account" namespace="/user/account" extends="idsd_default">
+    <action name="change_password_view">
+      <result>/jsp/user/password/change_password.jsp</result>
+    </action>
+
+    <action name="change_password" class="UserPasswordBean" method="changePassword">
+      <result type="redirectAction">
+        <param name="actionName">change_password_success</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input">/jsp/user/password/change_password.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="change_password_success">
+      <result>/jsp/user/password/password_confirm.jsp</result>
+    </action>
+
+    <action name="view_profile" class="UserProfileBean" method="viewProfile">
+      <result>/jsp/user/profile/view_profile.jsp</result>
+      <result name="input">/jsp/user/profile/view_profile.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="edit_profile" class="UserProfileBean" method="editProfile">
+      <result type="redirectAction">
+        <param name="actionName">edit_profile_success</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input">/jsp/user/profile/view_profile.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="edit_profile_success">
+      <result>/jsp/user/profile/profile_success.jsp</result>
+    </action>
+
+  </package>
+
+
+  <package name="idsd_admin" namespace="/admin" extends="idsd_default">
+
+    <action name="approve_user_view" class="ApproveUserBean" method="searchView">
+      <result>/jsp/admin/user_management/search_user_view.jsp</result>
+      <result name="input">/jsp/admin/user_management/search_user_view.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="search_user" class="ApproveUserBean" method="searchUser">
+      <result>/jsp/admin/user_management/user_list.jsp</result>
+      <result name="input">/jsp/admin/user_management/user_list.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="view_all_users" class="ApproveUserBean" method="viewAllUsers">
+      <result>/jsp/admin/user_management/user_list.jsp</result>
+      <result name="input">/jsp/admin/user_management/user_list.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+    <action name="pick_user" class="ApproveUserBean" method="pickUser">
+      <result>/jsp/admin/user_management/approve_user.jsp</result>
+      <result name="input">/jsp/admin/user_management/approve_user.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="approve_user" class="ApproveUserBean" method="approveUser">
+      <result>/jsp/admin/user_management/approve_success.jsp</result>
+      <result name="input">/jsp/admin/user_management/approve_user.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="reset_password" class="ApproveUserBean" method="resetUserPassword">
+      <result>/jsp/admin/user_management/reset_password_success.jsp</result>
+      <result name="input">/jsp/admin/user_management/approve_user.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="edit_others_profile" class="ApproveUserBean" method="editOthersProfile">
+      <result>/jsp/admin/user_management/edit_profile_success.jsp</result>
+      <result name="input">/jsp/admin/user_management/view_others_profile.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="edit_others_profile_view" class="ApproveUserBean" method="editOthersProfileView">
+      <result>/jsp/admin/user_management/view_others_profile.jsp</result>
+      <result name="input">/jsp/admin/user_management/approve_user.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="activate_user" class="ApproveUserBean" method="activateUser">
+      <result>/jsp/admin/user_management/user_list.jsp</result>
+      <result name="input">/jsp/admin/user_management/approve_user.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="deactivate_user" class="ApproveUserBean" method="deactivateUser">
+      <result>/jsp/admin/user_management/user_list.jsp</result>
+      <result name="input">/jsp/admin/user_management/approve_user.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="delete_user_attempt" class="ApproveUserBean" method="userDeletionAttempt">
+      <result>/jsp/admin/user_management/delete_user_confirm.jsp</result>
+      <result name="input">/jsp/admin/user_management/user_list.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="delete_user_confirm" class="ApproveUserBean" method="confirmUserDeletion">
+      <result>/jsp/admin/user_management/delete_user_success.jsp</result>
+      <result name="input">/jsp/admin/user_management/delete_user_confirm.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="centre_management_view" class="CentreManagementBean" method="centreManagementView">
+      <result>/jsp/admin/centre/centre_management.jsp</result>
+      <result name="input">/jsp/admin/view_centres.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="create_centre" class="CentreManagementBean" method="createCentre">
+      <result>/jsp/admin/centre/success.jsp</result>
+      <result name="input">/jsp/admin/centre/create_centre.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="edit_centre_view" class="CentreManagementBean" method="editCentreView">
+      <result>/jsp/admin/centre/edit_centre.jsp</result>
+      <result name="input">/jsp/admin/centre/edit_centre.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="edit_centre" class="CentreManagementBean" method="editCentre">
+      <result>/jsp/admin/centre/success.jsp</result>
+      <result name="input">/jsp/admin/centre/edit_centre.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="delete_centre" class="CentreManagementBean" method="deleteCentre">
+      <result>/jsp/admin/centre/success.jsp</result>
+      <result name="input">/jsp/admin/centre/delete_centre.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="create_country" class="CentreManagementBean" method="createCountry">
+      <result>/jsp/admin/centre/success.jsp</result>
+      <result name="input">/jsp/admin/centre/create_country.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="edit_country" class="CentreManagementBean" method="editCountry">
+      <result>/jsp/admin/centre/success.jsp</result>
+      <result name="input">/jsp/admin/centre/edit_country.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="delete_country" class="CentreManagementBean" method="deleteCountry">
+      <result>/jsp/admin/centre/success.jsp</result>
+      <result name="input">/jsp/admin/centre/delete_country.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="view_leader" class="CentreManagementBean" method="viewLeader">
+      <result>/jsp/admin/centre/edit_leader.jsp</result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">centre_management_view</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="edit_leader" class="CentreManagementBean" method="editLeader">
+      <result>/jsp/admin/centre/success.jsp</result>
+      <result name="input">/jsp/admin/centre/edit_leader.jsp</result>
+      <!-- <result name="input">/jsp/admin/centre/edit_leader.jsp</result> -->
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="age16Reminder" class="Age16ReminderBean">
+      <result>/jsp/admin/age16reminder.jsp</result>
+      <result name="expire">/jsp/exception/session_expire.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="password_reminder" class="UserAccountReminderBean" method="passwordResetReminder">
+      <result>/jsp/schedule/success.jsp</result>
+      <result name="expire">/jsp/exception/session_expire.jsp</result>
+      <result name="error">/jsp/schedule/error.jsp</result>
+    </action>
+
+    <action name="inactive_reminder" class="UserAccountReminderBean" method="inactiveUserReminder">
+      <result>/jsp/schedule/success.jsp</result>
+      <result name="expire">/jsp/exception/session_expire.jsp</result>
+      <result name="error">/jsp/schedule/error.jsp</result>
+    </action>
+
+    <action name="force_password_reset" class="UserAccountReminderBean" method="forceResetPassword">
+      <result>/jsp/schedule/success.jsp</result>
+      <result name="expire">/jsp/exception/session_expire.jsp</result>
+      <result name="error">/jsp/schedule/error.jsp</result>
+    </action>
+
+    <action name="deactivate_users" class="UserAccountReminderBean" method="deactivateUsers">
+      <result>/jsp/schedule/success.jsp</result>
+      <result name="expire">/jsp/exception/session_expire.jsp</result>
+      <result name="error">/jsp/schedule/error.jsp</result>
+    </action>
+
+  </package>
+
+  <package name="idsd_upload" namespace="/upload" extends="idsd_default">
+
+    <action name="uploadResultPDFView" class="ResultPDFBean" method="uploadResultPDFView">
+      <result>/jsp/upload/upload_result.jsp</result>
+      <result name="input">/jsp/upload/upload_result.jsp</result>
+      <result name="expire">/jsp/exception/session_expire.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="uploadResultPDF" class="ResultPDFBean" method="uploadResultPDF">
+      <result name="success" type="redirectAction">
+        <param name="actionName">uploadResultPDFSuccess</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">uploadResultPDFView</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="expire">/jsp/exception/session_expire.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="uploadResultPDFSuccess">
+      <result>/jsp/upload/success.jsp</result>
+    </action>
+
+    <action name="viewMyUploads" class="ResultPDFBean" method="viewMyUploads">
+      <result>/jsp/upload/my_uploads.jsp</result>
+      <result name="input">/jsp/upload/upload_home.jsp</result>
+      <result name="expire">/jsp/exception/session_expire.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="removeUpload" class="ResultPDFBean" method="removeUpload">
+      <result type="redirectAction">
+        <param name="actionName">viewMyUploads</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input">/jsp/upload/my_uploads.jsp</result>
+      <result name="expire">/jsp/exception/session_expire.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="viewOthersResultPDF" class="ResultPDFBean" method="viewOthersResultPDF">
+      <result>/jsp/upload/others_uploads.jsp</result>
+      <!-- <result name="input">/jsp/upload/upload_home.jsp</result> -->
+      <result name="expire">/jsp/exception/session_expire.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="download" class="ResultPDFBean" method="downloadPdf">
+      <result name="success" type="stream">
+        <param name="contentType">${uploadContentType}</param>
+        <param name="inputName">fileInputStream</param>
+        <param name="contentDisposition">attachment;fileName=${uploadFileName}</param>
+        <param name="bufferSize">2048</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">viewOthersResultPDF</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="authz">/jsp/exception/authZ_failure.jsp</result>
+      <result name="expire">/jsp/exception/session_expire.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+  </package>
+
+  <package name="idsd_feedback" namespace="/feedback" extends="idsd_default">
+    <action name="send_feedback" class="sendFeedbackBean" method="sendFeedback">
+      <result type="redirectAction">
+        <param name="actionName">send_successful</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">send_feedback</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="expire">/jsp/exception/session_expire.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="send_successful">
+      <result>/jsp/feedback/success.jsp</result>
+    </action>
+  </package>
+
+  <package name="idsd_schedule" namespace="/schedule" extends="idsd_default">
+    <action name="password_reminder" class="UserAccountReminderBean" method="passwordResetReminder">
+      <result>/jsp/schedule/success.jsp</result>
+      <result name="error">/jsp/schedule/error.jsp</result>
+    </action>
+    <action name="inactive_reminder" class="UserAccountReminderBean" method="inactiveUserReminder">
+      <result>/jsp/schedule/success.jsp</result>
+      <result name="error">/jsp/schedule/error.jsp</result>
+    </action>
+  </package>
+
+  <package name="patient" namespace="/patient" extends="idsd_default">
+    <action name="index">
+      <result>/jsp/patient/index.jsp</result>
+    </action>
+
+    <action name="verify" class="patientBean" method="verifyPatientUser">
+      <result>/jsp/patient/verify.jsp</result>
+      <result name="input">/jsp/patient/verify.jsp</result>
+      <result name="error">/jsp/patient/error.jsp</result>
+    </action>
+    
+ 
+    <action name="activate" class="patientBean" method="activatePatientUser">
+    <result type="redirectAction">
+        <param name="actionName">view</param>
+        <param name="u">${u}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">verify</param>
+        <param name="u">${u}</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="error">/jsp/patient/error.jsp</result>
+    </action>
+    <action name="view" class="patientBean" method="viewPatientRecord">
+      <result name="SUCCESS">/jsp/patient/view.jsp</result>
+      <result name="error">/jsp/patient/error.jsp</result>
+    </action>
+  </package>
+
+  <package name="bulk_upload" namespace="/bulk" extends="idsd_default">
+    <action name="index">
+      <result>/jsp/upload/bulk/index.jsp</result>
+    </action>
+
+    <action name="upload" class="bulkUploadBean" method="file">
+      <result>/jsp/upload/bulk/results.jsp</result>
+      <result name="input" type="redirectAction">
+        <param name="actionName">index</param>
+        <param name="mode">${mode}</param>
+      </result>
+      <result name="error">/jsp/exception/error.jsp</result>
+    </action>
+
+    <action name="upload_result">
+      <result>/jsp/upload/bulk/results.jsp</result>
+    </action>
+  </package>
+
+</struts>

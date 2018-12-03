@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-autowire="byName" xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+  <context:annotation-config/>
+  <context:component-scan base-package="uk.ac.nesc.idsd"/>
+
+  <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations">
+      <list>
+        <value>classpath:jdbc.properties</value>
+        <value>classpath:idsd.properties</value>
+        <value>classpath:email.properties</value>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+    <property name="driverClass" value="${jdbc.class}"/>
+    <property name="jdbcUrl" value="${jdbc.url}"/>
+    <property name="user" value="${jdbc.username}"/>
+    <property name="password" value="${jdbc.password}"/>
+    <property name="autoCommitOnClose" value="true"/>
+    <property name="checkoutTimeout" value="${cpool.checkoutTimeout}"/>
+    <property name="initialPoolSize" value="${cpool.minPoolSize}"/>
+    <property name="minPoolSize" value="${cpool.minPoolSize}"/>
+    <property name="maxPoolSize" value="${cpool.maxPoolSize}"/>
+    <property name="acquireIncrement" value="${cpool.acquireIncrement}"/>
+    <!-- retry to reconnect indefinitely every 3 seconds when database is down: -->
+    <property name="acquireRetryAttempts" value="${cpool.acquireRetryAttempts}"/>
+    <property name="acquireRetryDelay" value="${cpool.acquireRetryDelay}"/>
+    <property name="breakAfterAcquireFailure" value="${cpool.breakAfterAcquireFailure}"/>
+    <!-- Also, to avoid broken connections lying in your pool indefinitely, use connection age management: -->
+    <property name="maxConnectionAge" value="${cpool.maxConnectionAge}"/>
+    <property name="maxIdleTime" value="${cpool.maxIdleTime}"/>
+    <property name="maxIdleTimeExcessConnections" value="${cpool.maxIdleTimeExcessConnections}"/>
+    <property name="idleConnectionTestPeriod" value="${cpool.idleConnectionTestPeriod}"/>
+    <!-- These may be quite expensive, but helpful if above is not enough: -->
+    <property name="testConnectionOnCheckin" value="${cpool.testConnectionOnCheckin}"/>
+    <property name="preferredTestQuery" value="${cpool.preferredTestQuery}"/>
+    <!-- You may also want to check for connection leaks which prevent recovery: -->
+    <property name="debugUnreturnedConnectionStackTraces" value="${cpool.debugUnreturnedConnectionStackTraces}"/>
+    <!--
+            <property name="hibernate.connection.release_mode" value="${cpool.connection.release_mode}" />
+            <property name="idleConnectionTestPeriod" value="${cpool.idleConnectionTestPeriod}" />
+            <property name="preferredTestQuery" value="${cpool.preferredTestQuery}" />
+            <property name="testConnectionOnCheckin" value="${cpool.testConnectionOnCheckin}" />
+            <property name="testConnectionOnCheckout" value="${cpool.testConnectionOnCheckout}" />
+     -->
+  </bean>
+
+  <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+        <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+        <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+        <prop key="hibernate.use_sql_comments">${hibernate.use_sql_comments}</prop>
+        <prop key="hibernate.connection.release_mode">${cpool.connection.release_mode}</prop>
+        <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+        <prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+        <!--<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>-->
+        <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+        <prop key="hibernate.id.new_generator_mappings">false</prop>
+      </props>
+
+    </property>
+    <property name="annotatedClasses">
+      <list>
+        <value>uk.ac.nesc.idsd.model.PortalUser</value>
+        <value>uk.ac.nesc.idsd.model.UserRole</value>
+        <value>uk.ac.nesc.idsd.model.Role</value>
+        <value>uk.ac.nesc.idsd.model.Section</value>
+        <value>uk.ac.nesc.idsd.model.Menu</value>
+        <value>uk.ac.nesc.idsd.model.Tertiary</value>
+        <value>uk.ac.nesc.idsd.model.Parameter</value>
+        <value>uk.ac.nesc.idsd.model.Option</value>
+        <value>uk.ac.nesc.idsd.model.GeneCategory</value>
+        <value>uk.ac.nesc.idsd.model.DsdGeneAnalysis</value>
+        <value>uk.ac.nesc.idsd.model.Audit</value>
+        <value>uk.ac.nesc.idsd.model.DsdGeneScreened</value>
+        <value>uk.ac.nesc.idsd.model.Feedback</value>
+        <value>uk.ac.nesc.idsd.model.DsdAssessment</value>
+        <value>uk.ac.nesc.idsd.model.DsdIdentifier</value>
+        <value>uk.ac.nesc.idsd.model.Gene</value>
+        <value>uk.ac.nesc.idsd.model.ResearchResult</value>
+        <value>uk.ac.nesc.idsd.model.ResearchResultCategory</value>
+        <value>uk.ac.nesc.idsd.model.Country</value>
+        <value>uk.ac.nesc.idsd.model.Centre</value>
+        <value>uk.ac.nesc.idsd.model.DsdCah</value>
+        <value>uk.ac.nesc.idsd.model.PatientUser</value>
+        <value>uk.ac.nesc.idsd.model.DsdCahVisit</value>
+        <value>uk.ac.nesc.idsd.model.DsdCahVisitEpisode</value>
+        <value>uk.ac.nesc.idsd.model.DsdCahVisitMedDetail</value>
+        <value>uk.ac.nesc.idsd.model.DsdSearchCriteria</value>
+      </list>
+    </property>
+  </bean>
+
+
+  <!-- TRANSACTION MANAGER & AOP
+  <bean id="transactionManager" class="org.springframework.transaction.jta.JtaTransactionManager">
+  </bean> -->
+
+  <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <!-- enable the configuration of transaction behaviour based on annotations -->
+  <tx:annotation-driven transaction-manager="transactionManager"/>
+
+  <tx:advice id="txAdvice" transaction-manager="transactionManager">
+    <tx:attributes>
+      <tx:method name="login*" propagation="REQUIRED"/>
+      <tx:method name="save*" propagation="REQUIRED"/>
+      <tx:method name="create*" propagation="REQUIRED"/>
+      <tx:method name="add*" propagation="REQUIRED"/>
+      <tx:method name="delete*" propagation="REQUIRED"/>
+      <tx:method name="update*" propagation="REQUIRED"/>
+      <tx:method name="audit*" propagation="REQUIRED"/>
+      <tx:method name="register*" propagation="REQUIRED"/>
+      <tx:method name="assignRolesForPortalUser" propagation="REQUIRED"/>
+      <tx:method name="resetPortalUserPassword" propagation="REQUIRED"/>
+      <tx:method name="changePassword" propagation="REQUIRED"/>
+      <tx:method name="activate*" propagation="REQUIRED"/>
+      <tx:method name="deactivate*" propagation="REQUIRED"/>
+        <tx:method name="*" read-only="false"/>
+    </tx:attributes>
+  </tx:advice>
+
+  <aop:config>
+    <aop:pointcut id="allManagerMethod" expression="execution(* uk.ac.nesc.idsd.service.*.*(..))"/>
+    <aop:advisor advice-ref="txAdvice" pointcut-ref="allManagerMethod"/>
+  </aop:config>
+  <!-- TRANSACTION MANAGER & AOP END-->
+
+
+  <!--bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+      <property name="host" value="smtp.campus.gla.ac.uk"/>
+      <property name="port" value="587"/>
+      <property name="username" value="i-dsd-registry"/>
+      <property name="password" value="d8HQ924kz3"/>
+      <property name="javaMailProperties">
+          <props>
+              <prop key="mail.transport.protocol">smtp</prop>
+              <prop key="mail.smtp.auth">true</prop>
+              <prop key="mail.smtp.starttls.enable">true</prop>
+              <prop key="mail.debug">true</prop>
+          </props>
+      </property>
+  </bean-->
+
+  <!-- this is a template message that we can pre-load with default state -->
+  <!--bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
+      <property name="from" value="registry@i-dsd.org"/>
+      <property name="subject" value="Test Subject"/>
+  </bean-->
+
+  <bean id="MailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="host" value="${SMTP_HOST_NAME}"/>
+    <property name="port" value="${SMTP_HOST_PORT}"/>
+    <property name="username" value="${SMTP_AUTH_USER}"/>
+    <property name="password" value="${SMTP_AUTH_PWD}"/>
+    <property name="javaMailProperties">
+      <props>
+        <prop key="mail.smtp.auth">true</prop>
+        <prop key="mail.smtp.starttls.enable">true</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
+    <property name="from" value="${FROM}"/>
+    <!--property name="to" value="${RECIPIENTS}" />
+    <property name="subject" value="I-DSD Registry User Registration Request" /-->
+  </bean>
+
+  <!-- You can have some pre-configured messagess also which are ready to send -->
+  <bean id="preConfiguredMessage" class="org.springframework.mail.SimpleMailMessage">
+    <property name="from" value="${FROM}"/>
+    <!-- property name="to" value="lokeshgupta1981@gmail.com"></property>
+    <property name="subject" value="FATAL - Application crash. Save your job !!"/-->
+  </bean>
+
+  <bean id="emailService" class="uk.ac.nesc.idsd.util.email.EmailService"/>
+
+  <!-- SERVICE LAYER -->
+  <bean id="UserService" class="uk.ac.nesc.idsd.service.impl.UserServiceImpl" scope="prototype"/>
+
+  <bean id="ParameterService" class="uk.ac.nesc.idsd.service.impl.ParameterServiceImpl" scope="prototype"/>
+
+  <bean id="CentreService" class="uk.ac.nesc.idsd.service.impl.CentreServiceImpl" scope="prototype"/>
+
+  <bean id="GeneService" class="uk.ac.nesc.idsd.service.impl.GeneServiceImpl" scope="prototype"/>
+
+  <bean id="AuditService" class="uk.ac.nesc.idsd.service.impl.AuditServiceImpl" scope="prototype"/>
+
+  <bean id="DsdIdentifierService" class="uk.ac.nesc.idsd.service.impl.DsdIdentifierServiceImpl" scope="prototype"/>
+
+  <bean id="dsdSearchCriteriaService" class="uk.ac.nesc.idsd.service.impl.DsdSearchCriteriaServiceImpl"
+        scope="prototype"/>
+
+  <!-- WEB BEANS -->
+
+  <bean id="LogoutBean" class="uk.ac.nesc.idsd.action.logout.LogoutAction" scope="prototype"/>
+
+  <bean id="UserRegisterBean" class="uk.ac.nesc.idsd.action.registration.UserRegistrationAction" scope="prototype"/>
+
+  <bean id="UserPasswordBean" class="uk.ac.nesc.idsd.action.user.UserPasswordAction" scope="prototype"/>
+
+  <bean id="UserProfileBean" class="uk.ac.nesc.idsd.action.user.EditUserProfileAction" scope="prototype"/>
+
+  <bean id="UserSearchBean" class="uk.ac.nesc.idsd.action.user.SearchUserAction" scope="prototype"/>
+
+  <bean id="searchDsdBean" class="uk.ac.nesc.idsd.action.search.SearchDsdAction" scope="prototype"/>
+
+  <bean id="searchDsdRequestBean" class="uk.ac.nesc.idsd.action.search.SearchDsdRequestAction" scope="prototype"/>
+
+  <bean id="searchMyCentreDsdRecordsBean" class="uk.ac.nesc.idsd.action.search.SearchMyCentreDsdRecordsAction"
+        scope="prototype"/>
+
+  <bean id="editCentreBean" class="uk.ac.nesc.idsd.action.search.EditCentreAction" scope="prototype"/>
+
+  <bean id="readDsdBean" class="uk.ac.nesc.idsd.action.search.ReadDsdAction" scope="prototype">
+    <property name="parameterService" ref="ParameterService"/>
+    <property name="dsdIdentifierService" ref="DsdIdentifierService"/>
+    <property name="auditService" ref="AuditService"/>
+    <property name="userService" ref="UserService"/>
+  </bean>
+
+  <!-- CREATE DSD IDENTIFIER BEAN -->
+  <bean id="createDsdCoreBean" class="uk.ac.nesc.idsd.action.create.CreateDsdCoreAction" scope="prototype"/>
+
+  <!-- CREATE DSD DIAGNOSIS BEAN -->
+  <bean id="createDsdClinicalBean" class="uk.ac.nesc.idsd.action.create.CreateDsdClinicalAction" scope="prototype"/>
+
+  <!-- CREATE DSD ASSESSMENTS BEAN -->
+  <bean id="createDsdAssessmentBean" class="uk.ac.nesc.idsd.action.create.CreateAssessmentAction" scope="prototype"/>
+
+  <!-- CREATE DSD GENE ANALYSIS BEAN -->
+  <bean id="createDsdGeneAnalysisBean" class="uk.ac.nesc.idsd.action.create.CreateGeneAnalysisAction"
+        scope="prototype"/>
+
+  <!-- CREATE CAH MODULE BEAN
+  <bean id="createDsdCahBean" class="uk.ac.nesc.idsd.action.create.CreateCahModuleAction" />
+  -->
+
+  <!-- EDIT VIEW - edit/update a record -->
+  <bean id="editDsdRecordViewBean" class="uk.ac.nesc.idsd.action.update.EditDsdViewAction" scope="prototype"/>
+
+  <!-- EDIT DSD IDENTIFIER -->
+  <bean id="editDsdCoreBean" class="uk.ac.nesc.idsd.action.update.EditDsdCoreAction" scope="prototype"/>
+
+  <!-- EDIT DSD DIAGNOSIS -->
+  <bean id="editDsdClinicalBean" class="uk.ac.nesc.idsd.action.update.EditDsdClinicalAction" scope="prototype"/>
+
+  <!-- EDIT DSD ASSESSMENTS BEAN -->
+  <bean id="editDsdAssessmentBean" class="uk.ac.nesc.idsd.action.update.EditDsdAssessmentAction" scope="prototype"/>
+
+  <!-- EDIT DSD GENE ANALYSIS BEAN -->
+  <bean id="editDsdGeneAnalysisBean" class="uk.ac.nesc.idsd.action.update.EditDsdGeneAnalysisAction"
+        scope="prototype"/>
+
+  <!-- EDIT CAH MODULE BEAN -->
+  <bean id="editDsdCahBean" class="uk.ac.nesc.idsd.action.update.EditCahModuleAction" scope="prototype"/>
+  
+    <!-- EDIT NEONATAL MODULE BEAN -->
+  <bean id="editDsdNeonatalBean" class="uk.ac.nesc.idsd.action.update.EditDsdNeonatalAction" scope="prototype"/>
+  
+ 
+
+  <!-- DELETE ACTION BEAN - DISPLAY FULL DETAIL OF DELETE ACTION -->
+  <bean id="deleteDsdBean" class="uk.ac.nesc.idsd.action.delete.DeleteDsdAction" scope="prototype">
+    <property name="dsdIdentifierService" ref="DsdIdentifierService"/>
+    <property name="parameterService" ref="ParameterService"/>
+    <property name="userService" ref="UserService"/>
+  </bean>
+
+  <!-- DELETE WITH CONFIRMATION - PHYSICALLY DELETE A RECORD FROM THE DB -->
+  <bean id="deleteConfirmBean" class="uk.ac.nesc.idsd.action.delete.DeleteDsdConfirmAction" scope="prototype">
+    <property name="dsdIdentifierService" ref="DsdIdentifierService"/>
+    <property name="userService" ref="UserService"/>
+  </bean>
+
+  <!-- Manage User roles to control access -->
+  <bean id="ApproveUserBean" class="uk.ac.nesc.idsd.action.admin.user.UserApprovalAction" scope="prototype"/>
+
+  <bean id="CentreManagementBean" class="uk.ac.nesc.idsd.action.admin.centre.CentreManagementAction" scope="prototype"/>
+
+  <!-- JSON BEAN - RETURN STATISTIC DATA ON THE RECORDS -->
+  <bean id="RecordStatisticBean" class="uk.ac.nesc.idsd.action.json.RecordStatisticAction" scope="prototype">
+    <property name="dsdIdentifierService" ref="DsdIdentifierService"/>
+  </bean>
+
+  <bean id="TotalRecrodNumberBean" class="uk.ac.nesc.idsd.action.json.TotalRecordNumberAction" scope="prototype">
+    <property name="dsdIdentifierService" ref="DsdIdentifierService"/>
+  </bean>
+
+  <bean id="UserAccountReminderBean" class="uk.ac.nesc.idsd.action.schedule.UserAccountReminderAction"
+        scope="prototype"/>
+
+  <!-- DAO BEANS -->
+  <bean id="portalUserDao" class="uk.ac.nesc.idsd.model.PortalUserDaoImpl">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="DsdCahDAO" class="uk.ac.nesc.idsd.model.DsdCahDaoImpl">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="RoleDAO" class="uk.ac.nesc.idsd.model.RoleDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="UserRoleDAO" class="uk.ac.nesc.idsd.model.UserRoleDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="SectionDAO" class="uk.ac.nesc.idsd.model.SectionDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="MenuDAO" class="uk.ac.nesc.idsd.model.MenuDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="TertiaryDAO" class="uk.ac.nesc.idsd.model.TertiaryDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="ParameterDAO" class="uk.ac.nesc.idsd.model.ParameterDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="OptionDAO" class="uk.ac.nesc.idsd.model.OptionDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="GeneCategoryDAO" class="uk.ac.nesc.idsd.model.GeneCategoryDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="DsdGeneAnalysisDAO" class="uk.ac.nesc.idsd.model.DsdGeneAnalysisDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="AuditDAO" class="uk.ac.nesc.idsd.model.AuditDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="DsdGeneScreenedDAO" class="uk.ac.nesc.idsd.model.DsdGeneScreenedDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="FeedbackDAO" class="uk.ac.nesc.idsd.model.FeedbackDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="DsdAssessmentDAO" class="uk.ac.nesc.idsd.model.DsdAssessmentDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="dsdIdentifierDao" class="uk.ac.nesc.idsd.model.DsdIdentifierDaoImpl">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="dsdSearchCriteriaDao" class="uk.ac.nesc.idsd.model.DsdSearchCriteriaDaoImpl">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="GeneDAO" class="uk.ac.nesc.idsd.model.GeneDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="CentreDAO" class="uk.ac.nesc.idsd.model.CentreDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="CountryDAO" class="uk.ac.nesc.idsd.model.CountryDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="PatientUserDAO" class="uk.ac.nesc.idsd.model.PatientUserDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="DsdCahVisitEpisodeDAO" class="uk.ac.nesc.idsd.model.DsdCahVisitEpisodeDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="dsdCahVisitDao" class="uk.ac.nesc.idsd.model.DsdCahVisitDaoImpl">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="DsdCahVisitMedDetailDAO" class="uk.ac.nesc.idsd.model.DsdCahVisitMedDetailDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="sendFeedbackBean" class="uk.ac.nesc.idsd.action.feedback.SendFeedbackAction" scope="prototype"/>
+
+  <bean id="ResearchResultDAO" class="uk.ac.nesc.idsd.model.ResearchResultDao" scope="prototype">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="ResearchResultCategoryDAO" class="uk.ac.nesc.idsd.model.ResearchResultCategoryDao" scope="prototype">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="Age16ReminderBean" class="uk.ac.nesc.idsd.action.admin.Age16ReminderAction" scope="prototype"/>
+
+  <bean id="ResultPDFBean" class="uk.ac.nesc.idsd.action.upload.UploadResultPDF" scope="prototype">
+    <property name="researchResultManager" ref="ResearchResultManager"/>
+    <property name="userService" ref="UserService"/>
+    <property name="dsdIdentifierService" ref="DsdIdentifierService"/>
+    <property name="auditService" ref="AuditService"/>
+  </bean>
+
+  <bean id="bulkUploadBean" class="uk.ac.nesc.idsd.action.upload.BulkUploadAction" scope="prototype"/>
+
+  <bean id="ResearchResultManager" class="uk.ac.nesc.idsd.service.impl.ResearchResultManagerImpl" scope="prototype">
+    <property name="researchResultDao" ref="ResearchResultDAO"/>
+    <property name="researchResultCategoryDao" ref="ResearchResultCategoryDAO"/>
+    <property name="userService" ref="UserService"/>
+  </bean>
+
+  <bean id="referPatientBean" class="uk.ac.nesc.idsd.action.search.ReferPatientDsdAction" scope="prototype"/>
+
+  <bean id="patientBean" class="uk.ac.nesc.idsd.action.patient.PatientAction" scope="prototype"/>
+
+</beans>

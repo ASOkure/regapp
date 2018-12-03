@@ -1,0 +1,58 @@
+@CHARSET "ISO-8859-1";
+
+div.statistic_area_div {
+  /*width: 610px;
+  height: 140px;*/
+  background-color: transparent;
+}
+
+.statistic_cell {
+  width: 86px;
+  text-align: center;
+}
+
+td.statistic_centre_name_cell {
+  font-weight: bold;
+}
+
+table.statistic_table {
+  border: 1px solid black;
+}
+
+div.statistic_area_div_loading {
+  width: 610px;
+  height: 140px;
+  background-color: transparent;
+  background-image: url(../images/ajax-loader-big.gif);
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+div.total_number_div {
+  float: left;
+  height: 18px;
+  width: 43px;
+  font-style: italic;
+  font-weight: bold;
+  text-align: center;
+}
+
+div.total_number_div_loading {
+  float: left;
+  height: 18px;
+  width: 30px;
+  background-color: transparent;
+  background-image: url(../images/ajax-loader.gif);
+  background-position: center center;
+  background-repeat: no-repeat;
+  font-style: italic;
+  font-weight: bold;
+}
+
+a.refresh_link {
+  /*position: absolute;
+  top: 300px;
+  left: 8px;*/
+}
+
+

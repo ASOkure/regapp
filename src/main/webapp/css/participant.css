@@ -1,0 +1,35 @@
+#page-left {
+  border: 0;
+  display: block;
+  float: left;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  padding: 10px;
+  width: 30%;
+}
+
+#page-right {
+  border: 0;
+  display: block;
+  float: left;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  padding: 10px;
+  width: 60%;
+}
+
+#patient_access_div {
+  overflow: hidden;
+}
+
+table.participant_table {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+td.participant_table_td {
+  width: 220px;
+  background: transparent;
+}

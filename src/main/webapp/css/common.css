@@ -1,0 +1,218 @@
+@CHARSET "ISO-8859-1";
+
+div.banner_div {
+  background-color: white;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-top-width: 0px;
+  display: block;
+  font-family: Arial;
+  font-size: 13px;
+  height: 60px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  width: 100%;
+}
+
+div.left_header {
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-top-width: 0px;
+  display: block;
+  float: left;
+  font-size: 13px;
+  height: 60px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  width: 85%;
+
+  background-image: url(../images/banner/header.jpg);
+  background-position: left center;
+  background-repeat: no-repeat;
+}
+
+div.right_header {
+  text-align: right;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-top-width: 0px;
+  display: block;
+  float: left;
+  font-size: 13px;
+  height: 60px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  width: 15%;
+}
+
+div.banner_images {
+  width: 36%;
+  float: left;
+  border: 0;
+}
+
+img.banner_image {
+  height: 118px;
+  border: 0;
+  /*vertical-align:text-bottom;*/
+}
+
+div.header_text_div {
+  position: relative;
+  width: 40%;
+  height: 118px;
+  float: left;
+  vertical-align: middle;
+}
+
+div.header_text {
+  position: absolute;
+  top: 50%;
+  font-family: Verdana;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+
+}
+
+.banner_div ul {
+  list-style: none;
+  margin: 0;
+  padding: 2px 10px 0px 2px;
+}
+
+/* settings for the list elements of 1st level tab menu */
+.banner_div ul li {
+  /*float: top;*/
+  margin: 0;
+  padding-bottom: 0px;
+  list-style-type: none;
+}
+
+/* settings for the ACTIVE tab in 1st level tab menu */
+.banner_div ul li .tab-active {
+  /*float: top;*/
+  padding-left: 6px;
+  color: red;
+  list-style-type: none;
+}
+
+.banner_div ul li .tab-active span {
+  display: block;
+  float: left;
+  padding: 4px 6px 6px 0px;
+}
+
+/* settings for INACTIVE tabs in 1st level tab menu */
+.banner_div ul a {
+  padding: 0px 0px 0px 6px;
+}
+
+.banner_div ul a span {
+  padding: 4px 6px 5px 0px;
+}
+
+.banner_div ul a, .banner_div ul a span {
+  display: block;
+  float: right;
+}
+
+/* Commented backslash hack hides rule from IE5-Mac \*/
+.pageHeader ul a, .banner_div ul a span {
+  float: none;
+}
+
+li.page_tips_li {
+  padding: 0;
+  margin: 0;
+  list-style-type: square;
+}
+
+li.page_tips_li_sub {
+  padding: 2px;
+  margin: 2px;
+}
+
+div.page-foot {
+  position: relative;
+  top: 10px;
+  height: 100px;
+}
+
+div.page-foot-left {
+  float: left;
+  width: 45%;
+}
+
+div.page-foot-middle {
+  float: left;
+  width: 30%;
+  vertical-align: top;
+}
+
+div.page-foot-right {
+  float: right;
+  width: 24%;
+  text-align: right;
+  vertical-align: top;
+}
+
+img.page-foot-image {
+  height: 40px;
+  border: 0px;
+}
+
+input.auto-text {
+  border: 0px;
+  background: transparent;
+}
+
+.display_only {
+  border: 0px;
+  background: transparent;
+  box-shadow: none;
+  width: 100%;
+}
+
+.readonly {
+  border: 0;
+  font-weight: bold;
+}
+
+div.page_body {
+  border: 0;
+  padding: auto;
+  margin: auto;
+  width: 1250px;
+}
+
+.text-center-align {
+  text-align: center;
+}

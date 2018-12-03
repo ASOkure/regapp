@@ -1,0 +1,106 @@
+<%@ page language="java" import="java.util.*,uk.ac.nesc.idsd.security.spring.User,uk.ac.nesc.idsd.util.Utility" pageEncoding="ISO-8859-1"%>
+<%@ page import="uk.ac.nesc.idsd.security.spring.SecurityUserHolder;"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
+
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+
+	User user = SecurityUserHolder.getCurrentUser();
+%>
+
+<jsp:include page="/jsp/page/page_head.jsp" />
+<jsp:include page="/jsp/page/page_nav.jsp" />
+
+<h1>Current registered centres</h1>
+
+( <a href="<%=path %>/jsp/admin/centre/create_country.jsp">Add New</a> )
+
+<s:actionerror cssClass="error_message"/>
+<s:fielderror cssClass="error_message"/>
+
+<s:form id="country_centre_form" theme="simple">
+	<div id="results_div">
+		<br/>
+		<span style="font-style: italic; font-size: 16px; ">Loading......</span>
+		<br/><br/>
+		<table id="country_centre_table" border="1">
+			<thead>
+				<tr>
+					<th id="country">Country</th>
+					<th id="countryAction">Country Actions</th>
+					<th id="centre">Centre</th>
+					<th id="centreAction">Centre Actions</th>
+					<th id="centreLeader">Centre Leader</th>
+					<th id="centreLeaderAction">Change Leader</th>
+				</tr>
+			</thead>
+			<tbody>
+				<s:iterator value="countries" var="cn" status="country">
+					<tr>
+						<td rowspan="<s:property value='#cn.tertiaries.size'/>">
+							<span style="font-weight:bold;"><s:property value="#cn.value"/></span>
+						</td>
+						<td rowspan="<s:property value='#cn.tertiaries.size'/>">
+							<s:url id="country_edit" value="%{path}/jsp/admin/centre/edit_country.jsp">
+								<s:param name="countryId" value="%{#cn.optionId}" />
+								<s:param name="countryName" value="%{#cn.value}" />
+							</s:url>
+							<s:a name="%{value}" href="%{country_edit}">Edit</s:a> |
+							<s:url id="country_delete" value="%{path}/jsp/admin/centre/delete_country.jsp">
+								<s:param name="countryId" value="%{#cn.optionId}" />
+								<s:param name="countryName" value="%{#cn.value}" />
+							</s:url>
+							<s:a name="%{value}" href="%{country_delete}">Remove</s:a>
+						</td>
+						<s:if test="#cn.tertiaries.size == 0">
+							<td></td>
+							<td>
+								<s:url id="centre_create" value="%{path}/jsp/admin/centre/create_centre.jsp">
+									<s:param name="countryId" value="%{#cn.optionId}" />
+									<s:param name="countryName" value="%{#cn.value}" />
+								</s:url>
+								<s:a name="%{value}" href="%{centre_create}">Add New</s:a>
+							</td>
+							<td></td><td></td>
+						</s:if>
+						<s:else>
+							<s:iterator value="#cn.tertiaries" var="ct" status="centre">
+								<s:if test="#centre.count > 1">
+									<tr>
+								</s:if>
+										<td><s:property value="value"/></td>
+										<td>
+											<s:url id="centre_edit" value="%{path}/jsp/admin/centre/edit_centre.jsp">
+												<s:param name="centreId" value="%{tertiaryId}" />
+												<s:param name="centreName" value="%{value}" />
+											</s:url>
+											<s:a name="%{value}" href="%{centre_edit}">Edit</s:a> |
+											<s:url id="centre_delete" value="%{path}/jsp/admin/centre/delete_centre.jsp">
+												<s:param name="centreId" value="%{tertiaryId}" />
+												<s:param name="centreName" value="%{value}" />
+											</s:url>
+											<s:a name="%{value}" href="%{centre_delete}">Remove</s:a>
+										</td>
+										<td>
+											<s:property value="leaderMap[value].leader"/>
+										</td>
+										<td>
+											<s:url id="leader_edit" value="view_leader.action">
+												<s:param name="centreId" value="%{tertiaryId}" />
+												<s:param name="centreName" value="%{value}" />
+											</s:url>
+											<s:a name="%{value}" href="%{leader_edit}">Edit</s:a>
+										</td>
+								</tr>
+							</s:iterator>
+						</s:else>
+				</s:iterator>
+			</tbody>
+		</table>
+	</div>
+</s:form>
+	
+<jsp:include page="/jsp/page/page_foot.jsp" />

@@ -1,0 +1,3 @@
+local patient id,year of birth,original sex assigned,country,centre,doctor surname,email,karyotype,disorder type,actual diagnosis,level of sharing
+1,2000,m,United Kingdom,Glasgow,Ahmed,abc@gmail.com,Presumed XY,Congenital Adrenal Hyperplasia,21-hydroxylase def (CYP21A),4
+2,2000,f,Germany,Berlin,Mohnike,abc@gmail.com,46 XY,Disorder of gonadal development,Complete gonadal dysgenesis,4

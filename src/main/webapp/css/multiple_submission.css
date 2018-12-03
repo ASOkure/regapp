@@ -1,0 +1,177 @@
+@CHARSET "ISO-8859-1";
+
+table.gene_analysis_page_table {
+  border: 0px;
+}
+
+tr.gene-analysis-line-double {
+  background-color: #FFFF99;
+  border: 1px solid black;
+}
+
+td.first_column {
+  border-collapse: collapse;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+}
+
+td.first_field_column {
+  border-collapse: collapse;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+}
+
+td.sperate_line {
+  /*
+   border-left: 1px solid green;
+   */
+  border-left: 1px solid black;
+}
+
+td.detail_td {
+  width: 160px;
+}
+
+table.secondary_table {
+  background: transparent;
+  border-collapse: collapse;
+  border: 0;
+}
+
+table.secondary_table_hidden {
+  display: none;
+}
+
+tr.gene_secondary_table_tr {
+  border-collapse: collapse;
+  border-bottom: 1px solid black;
+}
+
+tr.gene_secondary_table_tr_bottom {
+  border-collapse: collapse;
+  border-bottom: 0;
+}
+
+td.gene_secondary_table_td {
+  border-collapse: collapse;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+td.gene_secondary_table_td_bottom {
+  border-collapse: collapse;
+  border-left: 1px solid black;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+td.gene_secondary_table_td_right {
+  border-collapse: collapse;
+  border-left: 1px solid black;
+  border-right: 0;
+  border-bottom: 1px solid black;
+}
+
+td.gene_secondary_table_td_label {
+  border-collapse: collapse;
+  border: 0;
+}
+
+table.tertiary_table {
+  background: transparent;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+table.tertiary_table_hidden {
+  display: none;
+}
+
+div.screened_gene_edit_button_class {
+  display: block;
+}
+
+div.screened_gene_edit_button_class_hidden {
+  display: none;
+}
+
+td.tertiary_table_td_desc {
+  width: 160px;
+}
+
+th.direct_sequence_th {
+  width: 60px;
+}
+
+th.mutation_found_th {
+  width: 40px;
+}
+
+td.mutation_found_td {
+  text-align: center;
+}
+
+div.div_hidden {
+  display: none;
+}
+
+div.div_shown {
+  vertical-align: middle;
+}
+
+div.gene_analysis_label_div {
+  vertical-align: middle;
+  float: left;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+font.warining_msg {
+  color: red;
+  font-weight: bold;
+}
+
+.gene_sequence_select {
+  vertical-align: top;
+  width: 166px;
+}
+
+.gene_sequence_text {
+
+}
+
+.gene_mutation_checkbox {
+  vertical-align: middle;
+}
+
+.gene_mutation_text {
+
+}
+
+#assessment_div {
+  position: relative;
+  height: 1300px;
+}
+
+#assessment_float_left {
+  float: left;
+  width: 53%;
+}
+
+#assessment_float_right {
+  float: right;
+  width: 46%;
+}
+
+.button_td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

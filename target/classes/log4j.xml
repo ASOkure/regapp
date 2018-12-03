@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM
+        "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <appender name="root-log" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="${catalina.home}/logs/idsd.log"/>
+        <param name="append" value="true"/>
+        <param name="encoding" value="GBK"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p %l - %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="log" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="${catalina.home}/logs/idsd.log"/>
+        <param name="append" value="true"/>
+        <param name="encoding" value="GBK"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%t:%13F:%L] - %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="log-console" class="org.apache.log4j.ConsoleAppender">
+        <param name="encoding" value="GBK"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%t:%13F:%L] - %m%n"/>
+        </layout>
+    </appender>
+    <appender name="error-log" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="${catalina.home}/logs/idsd_error.log"/>
+        <param name="append" value="true"/>
+        <param name="encoding" value="GBK"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-5p %l - %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="ERROR"/>
+            <param name="LevelMax" value="ERROR"/>
+        </filter>
+    </appender>
+
+    <logger name="uk.ac.nesc.idsd" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="log"/>
+        <appender-ref ref="log-console"/>
+    </logger>
+
+    <logger name="org.springframework" additivity="false">
+        <level value="FATAL"/>
+        <appender-ref ref="log"/>
+        <appender-ref ref="log-console"/>
+    </logger>
+
+    <logger name="org.hibernate" additivity="false">
+        <level value="FATAL"/>
+        <appender-ref ref="log"/>
+        <appender-ref ref="log-console"/>
+    </logger>
+
+    <logger name="com.mchange.v2" additivity="false">
+        <level value="FATAL"/>
+        <appender-ref ref="log"/>
+        <appender-ref ref="log-console"/>
+    </logger>
+
+    <logger name="com.opensymphony" additivity="false">
+        <level value="ERROR"/>
+        <appender-ref ref="log"/>
+        <appender-ref ref="log-console"/>
+    </logger>
+
+    <logger name="uk.ac.nesc" additivity="false">
+        <level value="ERROR"/>
+        <appender-ref ref="error-log"/>
+        <appender-ref ref="log-console"/>
+    </logger>
+
+    <root>
+        <level value="info"/>
+        <appender-ref ref="root-log"/>
+    </root>
+</log4j:configuration>
