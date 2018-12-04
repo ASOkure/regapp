@@ -1,15 +1,6 @@
 <%@ page contentType = "text/html; charset = UTF-8"%>
 <%@ page language="java" pageEncoding="UTF-8" %>
-<%@ taglib prefix="sx" uri="/struts-dojo-tags" %>
-
-<html>
-<head>
-<sx:head />
-</head>
-
-   
-   <body>
-
+<%@ taglib prefix = "s" uri = "/struts-tags" %>
 
 
 <% String path = request.getContextPath();%>
@@ -52,23 +43,20 @@
 
 
 <br/><br>
-<!-- External Phenotyp table -->
-
-
-  <s:hidden name="registerId" value="%{registerId}"/>
+ <s:hidden name="registerId" value="%{registerId}"/>
   <s:hidden name="mode" value="%{mode}"/>
   <s:hidden name="dsdCahVisitId" value="%{dsdCahVisitId}"/>
   
   
-  <s:form id="upload_neonatal" action="/update/save_neonatal_visit" theme="xhtml" cssClass='required-validate'>
-  <s:textfield label="Date of Assessment" name="DsdNeoLongBean.dateOfAssessment" /> 
+  <s:form id="upload_neonatal" action="/update/save_neonatal_visit" theme="idsd_xhtml" cssClass='required-validate'>
+
+ <tr>
+ <td><h3>DSD</h3></td>
+ </tr>
+
  
- <sx:datetimepicker name="myBirthday" label="My Birth Day 
-   (dd-MM-yyyy)" displayFormat="dd-MM-yyyy" />
-   
-  
-  
-   <s:textfield label = "Age at Assessment" name = "DsdNeoLongBean.ageAtAssessment" />
+ <s:textfield label="Date of Assessment" name="DsdNeoLongBean.dateOfAssessment" /> 
+  <s:textfield label = "Age at Assessment" name = "DsdNeoLongBean.ageAtAssessment" />
    <s:radio label = "Original Sex Assigned" name="DsdNeoLongBean.gender" list="{'M', 'F', 'Not Assigned',  'Both', 'Other'}" />
     <s:radio label = "Current Gender" name="DsdNeoLongBean.gender" list="{'M','F','Not Assigned', 'Both', 'Other'}" />
     <s:radio label = "Is the child being raised as" name = "DsdNeoLongBean.gender" list="{'M','F', 'Both', 'Other'}" />
@@ -84,37 +72,52 @@
     <s:textfield label = "Birth Weight" name = "DsdNeoLongBean.birthWeight" />
      <s:textfield label = "Birth Length" name="DsdNeoLongBean.birthLength" />
 	<s:textfield label = "Birth Head Circumference"  name = "DsdNeoLongBean.birthHeadCircumference" />
+     
+      <tr>
+ <td><h3>External Phenotype</h3></td>
+ </tr>
      <s:select name = "DsdNeoLongBean.gestationAge" 
      label = "Gestation Age" list="{'Select','23 weeks','24 weeks','25 weeks','26 weeks','27 weeks','28 weeks','29 weeks',
             '30 weeks','31 weeks','32 weeks','33 weeks','34 weeks','35 weeks','36 weeks','37 weeks',
             '38 weeks','39 weeks','40 weeks','41 weeks','42 weeks','43 weeks'}" />
             
        <s:select name = "DsdNeoLongBean.Meatus" label = "Meatus"
-            list = "{ 'Select', 'Normal','Glandular', 'Coronal', 'Penile Shaft', 'Perineo Scrotal'}" />
+            list = "{ 'Select', 'Typical female','Perineal', 'Scrotal', 'Penoscrotal', 'Penile', 'Coronal', 'Typical male'}" />
+        
         <s:select name = "DsdNeoLongBean.leftGonadLocation" label = "Left Gonad Location" 
-            list = "{'Select','Labioscrotal','Inguinal','Impalpable'}" />
+         list = "{'Select', 'Impalpable', 'Inguinal','Inguinoscrotal','Labioscrotal'}" />
+       
        <s:select name = "DsdNeoLongBean.rightGonadLocation" label = "Right Gonad Location"
-            list = "{'Select','Labioscrotal','Inguinal','Impalpable'}"/> 
-        <s:textfield label = "Genital Tubercle Length" name = "DsdNeoLongBean.genitalTubercleLength" /> 
+            list = "{'Select', 'Impalpable', 'Inguinal','Inguinoscrotal','Labioscrotal'}"/> 
+       
+        <s:select name = "DsdNeoLongBean.genitalTubercleLength" label = "Genital Tubercle Length" 
+        list = "{'Select','<10','10-20','21-25', '26-30', '>30', 'Not known'}"/>
+       
         <s:select name = "DsdNeoLongBean.phallusSize" label = "Phallus Size"
             list = "{'Select','Normal','Small for male','Large for female'}"/>
         <s:radio label = "Labioscrotal Fusion" name = "DsdNeoLongBean.labiosrotalFusion" list="{'Yes','No'}" />
       <s:textfield label = "Anogenital Distance (AGD)" name = "DsdNeoLongBean.anogenitalDistance" /> 
      <s:textfield label = "Anoscrotal Distance (ASD)" name = "DsdNeoLongBean.anoscrotalDistance" /> 
      <s:textfield label="External Masculinisation Score (EMS)" name=" DsdNeoLongBean.anoscrotalDistance"/>
-              <s:textfield label="External Genitalis Score (EGS)" name=" DsdNeoLongBean.anoscrotalDistance"/>
-             <!-- 4 -->
-             
+     <s:textfield label="External Genitalia Score (EGS)" name=" DsdNeoLongBean.anoscrotalDistance"/>
             
+             
+             <tr>
+ <td><h3>Internal Phenotype</h3></td>
+ </tr>
              <s:select name = "DsdNeoLongBean.imagingmodalityLeftGonad" label = "Imaging Modality-Left Gonad" 
             list = "{'Select','US','MRI','Genitogram','Laparoscopy','Genitoscopy'}" />
            
           <s:select name = "DsdNeoLongBean.imagingmodalityrightGonad" label = "Imaging Modality-Right Gonad" 
             list = "{'Select','US','MRI','Genitogram','Laparoscopy','Genitoscopy'}" />
+           
            <s:select name = "DsdNeoLongBean.leftGonadMorphology" label = "Left Gonad Morphology" 
             list = "{'Select','Absent','Streak','Testis','Ovary','Ovotestis','Other'}" />
+            
             <s:select name = "DsdNeoLongBean.rightGonadMorphology" label = "Right Gonad Morphology" 
             list = "{'Select','Absent','Streak','Testis','Ovary','Ovotestis','Other'}" />
+            
+            
             <s:select name = "DsdNeoLongBean.imagingModalityUterus" label = "Imaging Modality-Uterus" 
              list = "{'Select','US','MRI','Genitogram','Laparoscopy','Genitoscopy'}" />
             <s:select name = "DsdNeoLongBean.uterusMorphology" label = "Uterus Morphology" 
@@ -138,12 +141,13 @@
             <s:textfield label = "Distance- Vaginal Confluence to Bladder Neck" name = "DsdNeoLongBean.distancevaginalconfluencetobladderneck"/>
               <s:textfield label = "Distance- Vaginal Confluence to Introitus" name = "DsdNeoLongBean.distancevaginalconfluencetointroitus"/> 
               
-              <!-- 5 -->     
+             <tr>
+ <td><h3>Psychosocial</h3></td>
+ </tr>
             
               <s:radio label="Has  there been a change in legal sex" name="DsdNeoLongBean.changeInLegalSex" list="{'Yes','No','Not Known'}" />
            <s:radio label="Psychosocial Support for parents" name="DsdNeoLongBean.psychosocialSupportForParents" list="{'Yes','No','Not Known'}" />
    
-       <!-- 6Surgery -->
        
        
        
@@ -161,9 +165,11 @@
               <s:radio label = "Right Gonadectomy" name = "DsdNeoLongBean.RightGonadectomy" list="{'Yes','No','Not known'}" />
                <s:radio label = "Complications following surgery" name = "DsdNeoLongBean.Complicationsfollowingsurgery" list="{'Yes','No','Not known'}"/>
                
-               <!-- 7 Medication-->
+             
           
-               
+                <tr>
+ <td><h3>Medication</h3></td>
+ </tr>
                <s:radio label = "Testosterone" name = "DsdNeoLongBean.testosterone" list="{'Yes','No','Not known'}" />
                  <s:radio label = "DHT" name = "Dht" list="{'Yes','No','Not known'}" />
                   <s:radio label = "Aromatase Inhibitor" name = "DsdNeoLongBean.aromataseInhibitor" list="{'Yes','No','Not known'}" />
@@ -173,7 +179,9 @@
                       <s:radio label = "Oestrogen" name = "DsdNeoLongBean.oestrogen" list="{'Yes','No','Not known'}" />
                        <s:radio label = "Other drugs" name = "DsdNeoLongBean.OtherDrugs" list="{'Yes','No','Not known'}" />
                
-             <!-- 8 Lab Tests: Baseline-->
+              <tr>
+ <td><h3>Labs</h3></td>
+ </tr>
              
             <s:select name = "lh" label = "LH"  list = "{'Low','Normal','High','Not known'}" />
                         
@@ -197,15 +205,17 @@
                         
                         <s:select name = "DsdNeoLongBean.urineSteroids" label = "Urine steroids"  list = "{'Normal','Abnomal'}" />
                         
-                        <!-- 9HCG Stimulation Test -->
+                       
                         
                         <s:select name = "DsdNeoLongBean.hcgStimulationTest" label = "HCG Stimulation Test"  list = "{'Select',
             'hcg 1500 units x 3 over 1 week','hcg 1500 units x 7 over 3 weeks','Other- please specify (free text)'}" />
+                       
+                       
                         <s:select name = "DsdNeoLongBean.Androstenedione" label = "Androstenedione"  list = "{'Select','Low','Normal','High','Not known'}" />
                         <s:select name = "DsdNeoLongBean.totalTestosterone" label = "Total testosterone"  list = "{'Select','Low','Normal','High','Not known'}" />
                         <s:select name = "DsdNeoLongBean.Dihydrotestosterone" label = "Dihydrotestosterone"  list = "{'Select','Low','Normal','High','Not known'}"/>
                         
-                        <!-- 10 Adrenal Stimulation Test -->
+                     
                        
                         
                          <s:textfield key = "Adrenal Stimulation Test" name = "AdrenalStimulationTest" />
@@ -219,14 +229,10 @@
                         <s:textfield key = "Free Text" name = "DsdNeoLongBean.FreeText" />
                         
                         <s:submit type="button" name="btnSave" />
-                        </div>
+                   
        
         
-       
-        
-      
-  
-   </s:form>
+        </s:form>
     
     
    
