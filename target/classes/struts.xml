@@ -405,7 +405,7 @@
     </action>
 
 <!--  sam added below for DsdNeonatal module -->
-    <action name="save_neonatal_visit" class="editDsdNeonatalBean" method="execute">
+   <!--   <action name="save_neonatal_visits" class="editDsdNeonatalBean" method="execute">
       <result type="redirectAction">
         <param name="actionName">create_cah_success</param>
         <param name="registerId">${registerId}</param>
@@ -424,7 +424,7 @@
       <result name="expire">/jsp/exception/timeout.jsp</result>
       <result name="error">/jsp/exception/error.jsp</result>
     </action>
-
+-->
 <!--  sam end above here for DSDlong module -->
 
 
@@ -847,8 +847,21 @@
       <result name="owner">/jsp/exception/owner_failure.jsp</result>
       <result name="error">/jsp/exception/error.jsp</result>
     </action>
+   
     
-    
+    <!--  
+    <action name="dsdlong" class="editDsdNeonatalBean" method="editNeonatalView">
+      <result name="success">/jsp/update/dsdlong.jsp</result>
+     
+      <result name="input">/jsp/update/cah.jsp</result>
+      <result name="consent">/jsp/exception/consent_failure.jsp</result>
+      <result name="expire">/jsp/exception/timeout.jsp</result>
+      <result name="owner">/jsp/exception/owner_failure.jsp</result>
+      <result name="error">/jsp/exception/error.jsp</result>
+      
+    </action>
+  
+    -->
    
     
     

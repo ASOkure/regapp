@@ -10,6 +10,7 @@ import uk.ac.nesc.idsd.model.DsdCahVisit;
 import uk.ac.nesc.idsd.model.DsdGeneAnalysis;
 import uk.ac.nesc.idsd.model.DsdGeneScreened;
 import uk.ac.nesc.idsd.model.DsdIdentifier;
+import uk.ac.nesc.idsd.model.DsdNeonatalVisits;
 import uk.ac.nesc.idsd.model.DsdSearchCriteria;
 import uk.ac.nesc.idsd.model.Parameter;
 import uk.ac.nesc.idsd.model.PortalUser;
@@ -86,4 +87,8 @@ public interface DsdIdentifierService {
     String getCsvByIds(Set<Long> registerIds);
 
     String getCsvByDsdSearchResult(SearchResult searchResult);
+    
+    //sam added below
+
+	DsdIdentifier saveNeonatal(DsdIdentifier dsdIdentifier, DsdNeonatalVisits dsdneonatalvisits) throws ServiceException;
 }

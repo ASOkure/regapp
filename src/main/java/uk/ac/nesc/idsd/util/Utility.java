@@ -838,7 +838,7 @@ public class Utility {
                 "If you have any question regarding this, please email Dr Jillian Bryce at Jillian.Bryce@glasgow.ac.uk. " +
                 "\n\nKind regards,\nI-DSD System Administrator\n" + date;
     }
-
+    //Patient-Access activation Email
     public static String constructPatientAccessInvitationEmailMsg(String username) {
         Calendar now = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMMM-yyyy");
@@ -847,10 +847,12 @@ public class Utility {
                 "A user account has just been created for accessing the I-DSD Registry (i-dsd.org) with username \n\n"
                 + username +
                 "\n\nPlease activate your user account through this link: " +
-                "\nhttp://www.i-dsd.org/patient/verify.action?u=" + username +
+               // "\nhttp://www.i-dsd.org/patient/verify.action?u=" + username +
+                "\nhttps://mvls-dsd.mvls.gla.ac.uk/patient/verify.action?u=" + username +
                 "\n\nOnce you have activated your account, you will be able to see your record. " +
                 "\nAlternatively, you can access the registry through this link:" +
-                "\nhttp://www.i-dsd.org/patient/index.action" +
+               // "\nhttp://www.i-dsd.org/patient/index.action" +
+                "\nhttps://mvls-dsd.mvls.gla.ac.uk/patient/index.action" +
                 "\n\nIf you have any question regarding this process, please contact the Registry Manager, Dr Jillian Bryce at Jillian.Bryce@glasgow.ac.uk. " +
                 "\n\nKind regards,\nI-DSD System Administrator\n" + date;
     }

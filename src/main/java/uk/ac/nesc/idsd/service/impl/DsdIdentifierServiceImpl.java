@@ -32,6 +32,7 @@ import uk.ac.nesc.idsd.model.DsdGeneScreened;
 import uk.ac.nesc.idsd.model.DsdGeneScreenedDao;
 import uk.ac.nesc.idsd.model.DsdIdentifier;
 import uk.ac.nesc.idsd.model.DsdIdentifierDao;
+import uk.ac.nesc.idsd.model.DsdNeonatalVisits;
 import uk.ac.nesc.idsd.model.DsdSearchCriteria;
 import uk.ac.nesc.idsd.model.Parameter;
 import uk.ac.nesc.idsd.model.PortalUser;
@@ -1528,4 +1529,287 @@ public class DsdIdentifierServiceImpl implements DsdIdentifierService, Serializa
         }
     }
 
-}
+	@Override
+	public DsdIdentifier saveNeonatal(DsdIdentifier dsdIdentifier, DsdNeonatalVisits dsdneonatalvisits)
+			throws ServiceException {
+		
+				DsdIdentifier dbDsdIdentifier;
+		        DsdCah dsdCah;
+		        dsdneonatalvisits dbInstance;
+		        try {
+		            dbDsdIdentifier = this.dsdIdentifierDao.findById(dsdIdentifier.getRegisterId());
+		            dsdCah = dbDsdIdentifier.getDsdCah();
+		        } catch (Exception e) {
+		            throw new ServiceException("Error occurred while looking up CAH visit record from database.", e);
+		        }
+		        try {
+		            if (null != dsdneonatalvisits && null != dsdneonatalvisits.getDsd_neonatal_visit_id()) {
+		                log.info("Updating existing CAH visit");
+		                dbInstance = this.dsdneonatalvisitsDao.findById(dsdneonatalvisits.getdsdneonatalvisitsId());
+		                dbInstance.setDate(dsdneonatalvisits.getDate());
+		                dbInstance.setAge(dsdneonatalvisits.getAge());
+		                dbInstance.setWeight(dsdneonatalvisits.getWeight());
+		                dbInstance.setHeight(dsdneonatalvisits.getHeight());
+		                dbInstance.setWaistCircumference(dsdneonatalvisits.getWaistCircumference());
+		                dbInstance.setHipCircumference(dsdneonatalvisits.getHipCircumference());
+		                dbInstance.setBmi(dsdneonatalvisits.getBmi());
+		                dbInstance.setBsa(dsdneonatalvisits.getBsa());
+		                dbInstance.setCushingoid(dsdneonatalvisits.getCushingoid());
+		                dbInstance.setVirilisation(dsdneonatalvisits.getVirilisation());
+		                dbInstance.setBpSystolic(dsdneonatalvisits.getBpSystolic());
+		                dbInstance.setBpDiastolic(dsdneonatalvisits.getBpDiastolic());
+		                dbInstance.setSickDayEpisodes(dsdneonatalvisits.getSickDayEpisodes());
+		                dbInstance.setSickDayTotal(dsdneonatalvisits.getSickDayTotal());
+		                dbInstance.setdsdneonatalvisitsEpisodes(dsdneonatalvisits.getdsdneonatalvisitsEpisodes());
+		                dbInstance.setDailyAdherenceToTherapy(dsdneonatalvisits.getDailyAdherenceToTherapy());
+		                dbInstance.setTreatmentChange(dsdneonatalvisits.getTreatmentChange());
+		                dbInstance.setTreatmentChangeReason(dsdneonatalvisits.getTreatmentChangeReason());
+		                dbInstance.setGlucocorticoid(dsdneonatalvisits.getGlucocorticoid());
+		                dbInstance.setGlucocorticoidDetail(dsdneonatalvisits.getGlucocorticoidDetail());
+		                dbInstance.setGlucocorticoidNote(dsdneonatalvisits.getGlucocorticoidNote());
+		                dbInstance.setFludrocortisone(dsdneonatalvisits.getFludrocortisone());
+		                dbInstance.setFludrocortisoneDose(dsdneonatalvisits.getFludrocortisoneDose());
+		                dbInstance.setFludrocortisoneFrequency(dsdneonatalvisits.getFludrocortisoneFrequency());
+		                dbInstance.setFludrocortisoneNote(dsdneonatalvisits.getFludrocortisoneNote());
+		                dbInstance.setCurrentGcReplacement(dsdneonatalvisits.getCurrentGcReplacement());
+//		                dbInstance.setCurrentFcTreatment(dsdneonatalvisits.getCurrentFcTreatment());
+		                dbInstance.setSaltReplacement(dsdneonatalvisits.getSaltReplacement());
+		                dbInstance.setSaltReplacementDose(dsdneonatalvisits.getSaltReplacementDose());
+		                dbInstance.setSaltReplacementDoseUnit(dsdneonatalvisits.getSaltReplacementDoseUnit());
+		                dbInstance.setSaltReplacementFrequency(dsdneonatalvisits.getSaltReplacementFrequency());
+		                dbInstance.setSaltReplacementNote(dsdneonatalvisits.getSaltReplacementNote());
+		                dbInstance.setOestrogen(dsdneonatalvisits.getOestrogen());
+		                dbInstance.setOestrogenNote(dsdneonatalvisits.getOestrogenNote());
+		                dbInstance.setTestosterone(dsdneonatalvisits.getTestosterone());
+		                dbInstance.setTestosteroneNote(dsdneonatalvisits.getTestosteroneNote());
+		                dbInstance.setGnrhAnalogues(dsdneonatalvisits.getGnrhAnalogues());
+		                dbInstance.setGnrhAnaloguesNote(dsdneonatalvisits.getGnrhAnaloguesNote());
+		                dbInstance.setAntihypertensives(dsdneonatalvisits.getAntihypertensives());
+		                dbInstance.setAntihypertensivesNote(dsdneonatalvisits.getAntihypertensivesNote());
+		                dbInstance.setAntidiabetic(dsdneonatalvisits.getAntidiabetic());
+		                dbInstance.setAntidiabeticNote(dsdneonatalvisits.getAntidiabeticNote());
+		                dbInstance.setAntidepressants(dsdneonatalvisits.getAntidepressants());
+		                dbInstance.setAntidepressantsNote(dsdneonatalvisits.getAntidepressantsNote());
+		                dbInstance.setOtherDrugs(dsdneonatalvisits.getOtherDrugs());
+		                dbInstance.setOtherDrugsNote(dsdneonatalvisits.getOtherDrugsNote());
+		                dbInstance.setGenitaliaSurgery(dsdneonatalvisits.getGenitaliaSurgery());
+		                dbInstance.setGenitaliaSurgeryNote(dsdneonatalvisits.getGenitaliaSurgeryNote());
+		                dbInstance.setOtherSurgery(dsdneonatalvisits.getOtherSurgery());
+		                dbInstance.setOtherSurgeryNote(dsdneonatalvisits.getOtherSurgeryNote());
+		                dbInstance.setOtherCongenitalAbnormalities(dsdneonatalvisits.getOtherCongenitalAbnormalities());
+		                dbInstance.setOtherCongenitalAbnormalitiesNote(dsdneonatalvisits.getOtherCongenitalAbnormalitiesNote());
+		                dbInstance.setDiabetesMellitusType1(dsdneonatalvisits.getDiabetesMellitusType1());
+		                dbInstance.setDiabetesMellitusType1Note(dsdneonatalvisits.getDiabetesMellitusType1Note());
+		                dbInstance.setDiabetesMellitusType2(dsdneonatalvisits.getDiabetesMellitusType2());
+		                dbInstance.setDiabetesMellitusType2Note(dsdneonatalvisits.getDiabetesMellitusType2Note());
+		                dbInstance.setHypertension(dsdneonatalvisits.getHypertension());
+		                dbInstance.setHypertensionNote(dsdneonatalvisits.getHypertensionNote());
+		                dbInstance.setThyroidDisease(dsdneonatalvisits.getThyroidDisease());
+		                dbInstance.setThyroidDiseaseNote(dsdneonatalvisits.getThyroidDiseaseNote());
+		                dbInstance.setOsteoporosis(dsdneonatalvisits.getOsteoporosis());
+		                dbInstance.setOsteoporosisNote(dsdneonatalvisits.getOsteoporosisNote());
+		                dbInstance.setStroke(dsdneonatalvisits.getStroke());
+		                dbInstance.setStrokeNote(dsdneonatalvisits.getStrokeNote());
+		                dbInstance.setCardiovascularDisease(dsdneonatalvisits.getCardiovascularDisease());
+		                dbInstance.setCardiovascularDiseaseNote(dsdneonatalvisits.getCardiovascularDiseaseNote());
+		                dbInstance.setSmoking(dsdneonatalvisits.getSmoking());
+		                dbInstance.setSmokingNote(dsdneonatalvisits.getSmokingNote());
+		                dbInstance.setAnaemia(dsdneonatalvisits.getAnaemia());
+		                dbInstance.setAnaemiaNote(dsdneonatalvisits.getAnaemiaNote());
+		                dbInstance.setDepression(dsdneonatalvisits.getDepression());
+		                dbInstance.setDepressionNote(dsdneonatalvisits.getDepressionNote());
+		                dbInstance.setAnxiety(dsdneonatalvisits.getAnxiety());
+		                dbInstance.setAnxietyNote(dsdneonatalvisits.getAnxietyNote());
+		                dbInstance.setPsychosis(dsdneonatalvisits.getPsychosis());
+		                dbInstance.setPsychosisNote(dsdneonatalvisits.getPsychosisNote());
+		                dbInstance.setOtherMentalHealthProblem(dsdneonatalvisits.getOtherMentalHealthProblem());
+		                dbInstance.setOtherMentalHealthProblemNote(dsdneonatalvisits.getOtherMentalHealthProblemNote());
+		                dbInstance.setJointHypermobility(dsdneonatalvisits.getJointHypermobility());
+		                dbInstance.setJointHypermobilityNote(dsdneonatalvisits.getJointHypermobilityNote());
+		                dbInstance.setOtherComorbidCondition(dsdneonatalvisits.getOtherComorbidCondition());
+		                dbInstance.setOtherComorbidConditionNote(dsdneonatalvisits.getOtherComorbidConditionNote());
+		                dbInstance.setSodium(dsdneonatalvisits.getSodium());
+		                dbInstance.setSodiumDate(dsdneonatalvisits.getSodiumDate());
+		                dbInstance.setSodiumTime(dsdneonatalvisits.getSodiumTime());
+		                dbInstance.setSodiumNote(dsdneonatalvisits.getSodiumNote());
+		                dbInstance.setPotassium(dsdneonatalvisits.getPotassium());
+		                dbInstance.setPotassiumDate(dsdneonatalvisits.getPotassiumDate());
+		                dbInstance.setPotassiumTime(dsdneonatalvisits.getPotassiumTime());
+		                dbInstance.setPotassiumNote(dsdneonatalvisits.getPotassiumNote());
+		                dbInstance.setDeoxycortisol11(dsdneonatalvisits.getDeoxycortisol11());
+		                dbInstance.setDeoxycortisol11Date(dsdneonatalvisits.getDeoxycortisol11Date());
+		                dbInstance.setDeoxycortisol11Time(dsdneonatalvisits.getDeoxycortisol11Time());
+		                dbInstance.setDeoxycortisol11Note(dsdneonatalvisits.getDeoxycortisol11Note());
+		                dbInstance.setRenin(dsdneonatalvisits.getRenin());
+		                dbInstance.setReninDate(dsdneonatalvisits.getReninDate());
+		                dbInstance.setReninTime(dsdneonatalvisits.getReninTime());
+		                dbInstance.setReninNote(dsdneonatalvisits.getReninNote());
+		                dbInstance.setPlasmaReninActivity(dsdneonatalvisits.getPlasmaReninActivity());
+		                dbInstance.setPlasmaReninActivityDate(dsdneonatalvisits.getPlasmaReninActivityDate());
+		                dbInstance.setPlasmaReninActivityTime(dsdneonatalvisits.getPlasmaReninActivityTime());
+		                dbInstance.setPlasmaReninActivityNote(dsdneonatalvisits.getPlasmaReninActivityNote());
+		                dbInstance.setOhp17(dsdneonatalvisits.getOhp17());
+		                dbInstance.setOhp17Date(dsdneonatalvisits.getOhp17Date());
+		                dbInstance.setOhp17Time(dsdneonatalvisits.getOhp17Time());
+		                dbInstance.setOhp17Note(dsdneonatalvisits.getOhp17Note());
+		                dbInstance.setAndostenedione(dsdneonatalvisits.getAndostenedione());
+		                dbInstance.setAndostenedioneDate(dsdneonatalvisits.getAndostenedioneDate());
+		                dbInstance.setAndostenedioneTime(dsdneonatalvisits.getAndostenedioneTime());
+		                dbInstance.setAndostenedioneNote(dsdneonatalvisits.getAndostenedioneNote());
+		                dbInstance.setTotalTestosterone(dsdneonatalvisits.getTotalTestosterone());
+		                dbInstance.setTotalTestosteroneDate(dsdneonatalvisits.getTotalTestosteroneDate());
+		                dbInstance.setTotalTestosteroneTime(dsdneonatalvisits.getTotalTestosteroneTime());
+		                dbInstance.setTotalTestosteroneNote(dsdneonatalvisits.getTotalTestosteroneNote());
+		                dbInstance.setDihydrotestosterone(dsdneonatalvisits.getDihydrotestosterone());
+		                dbInstance.setDihydrotestosteroneDate(dsdneonatalvisits.getDihydrotestosteroneDate());
+		                dbInstance.setDihydrotestosteroneTime(dsdneonatalvisits.getDihydrotestosteroneTime());
+		                dbInstance.setDihydrotestosteroneNote(dsdneonatalvisits.getDihydrotestosteroneNote());
+		                dbInstance.setLh(dsdneonatalvisits.getLh());
+		                dbInstance.setLhDate(dsdneonatalvisits.getLhDate());
+		                dbInstance.setLhTime(dsdneonatalvisits.getLhTime());
+		                dbInstance.setLhNote(dsdneonatalvisits.getLhNote());
+		                dbInstance.setFsh(dsdneonatalvisits.getFsh());
+		                dbInstance.setFshDate(dsdneonatalvisits.getFshDate());
+		                dbInstance.setFshTime(dsdneonatalvisits.getFshTime());
+		                dbInstance.setFshNote(dsdneonatalvisits.getFshNote());
+		                dbInstance.setOestradiol(dsdneonatalvisits.getOestradiol());
+		                dbInstance.setOestradiolDate(dsdneonatalvisits.getOestradiolDate());
+		                dbInstance.setOestradiolTime(dsdneonatalvisits.getOestradiolTime());
+		                dbInstance.setOestradiolNote(dsdneonatalvisits.getOestradiolNote());
+		                dbInstance.setProgesterone(dsdneonatalvisits.getProgesterone());
+		                dbInstance.setProgesteroneDate(dsdneonatalvisits.getProgesteroneDate());
+		                dbInstance.setProgesteroneTime(dsdneonatalvisits.getProgesteroneTime());
+		                dbInstance.setProgesteroneNote(dsdneonatalvisits.getProgesteroneNote());
+		                dbInstance.setInhibinB(dsdneonatalvisits.getInhibinB());
+		                dbInstance.setInhibinBDate(dsdneonatalvisits.getInhibinBDate());
+		                dbInstance.setInhibinBTime(dsdneonatalvisits.getInhibinBTime());
+		                dbInstance.setInhibinBNote(dsdneonatalvisits.getInhibinBNote());
+		                dbInstance.setHaemoglobin(dsdneonatalvisits.getHaemoglobin());
+		                dbInstance.setHaemoglobinDate(dsdneonatalvisits.getHaemoglobinDate());
+		                dbInstance.setHaemoglobinTime(dsdneonatalvisits.getHaemoglobinTime());
+		                dbInstance.setHaemoglobinNote(dsdneonatalvisits.getHaemoglobinNote());
+		                dbInstance.setHaematocrit(dsdneonatalvisits.getHaematocrit());
+		                dbInstance.setHaematocritDate(dsdneonatalvisits.getHaematocritDate());
+		                dbInstance.setHaematocritTime(dsdneonatalvisits.getHaematocritTime());
+		                dbInstance.setHaematocritNote(dsdneonatalvisits.getHaematocritNote());
+		                dbInstance.setShbg(dsdneonatalvisits.getShbg());
+		                dbInstance.setShbgDate(dsdneonatalvisits.getShbgDate());
+		                dbInstance.setShbgTime(dsdneonatalvisits.getShbgTime());
+		                dbInstance.setShbgNote(dsdneonatalvisits.getShbgNote());
+		                dbInstance.setGlucose(dsdneonatalvisits.getGlucose());
+		                dbInstance.setGlucoseDate(dsdneonatalvisits.getGlucoseDate());
+		                dbInstance.setGlucoseTime(dsdneonatalvisits.getGlucoseTime());
+		                dbInstance.setGlucoseNote(dsdneonatalvisits.getGlucoseNote());
+		                dbInstance.setActh(dsdneonatalvisits.getActh());
+		                dbInstance.setActhDate(dsdneonatalvisits.getActhDate());
+		                dbInstance.setActhTime(dsdneonatalvisits.getActhTime());
+		                dbInstance.setActhNote(dsdneonatalvisits.getActhNote());
+		                dbInstance.setCortisol(dsdneonatalvisits.getCortisol());
+		                dbInstance.setCortisolDate(dsdneonatalvisits.getCortisolDate());
+		                dbInstance.setCortisolTime(dsdneonatalvisits.getCortisolTime());
+		                dbInstance.setCortisolNote(dsdneonatalvisits.getCortisolNote());
+		                dbInstance.setDheas(dsdneonatalvisits.getDheas());
+		                dbInstance.setDheasDate(dsdneonatalvisits.getDheasDate());
+		                dbInstance.setDheasTime(dsdneonatalvisits.getDheasTime());
+		                dbInstance.setDheasNote(dsdneonatalvisits.getDheasNote());
+		                dbInstance.setUrineSteroidsByGcms(dsdneonatalvisits.getUrineSteroidsByGcms());
+		                dbInstance.setUrineSteroidsByGcmsDate(dsdneonatalvisits.getUrineSteroidsByGcmsDate());
+		                dbInstance.setUrineSteroidsByGcmsTime(dsdneonatalvisits.getUrineSteroidsByGcmsTime());
+		                dbInstance.setUrineSteroidsByGcmsNote(dsdneonatalvisits.getUrineSteroidsByGcmsNote());
+		                dbInstance.setBoneAgeTestDate(dsdneonatalvisits.getBoneAgeTestDate());
+		                dbInstance.setBoneAgeResult(dsdneonatalvisits.getBoneAgeResult());
+		                dbInstance.setBoneAgeTestMethod(dsdneonatalvisits.getBoneAgeTestMethod());
+		                dbInstance.setBoneMineralDensityDone(dsdneonatalvisits.getBoneMineralDensityDone());
+		                dbInstance.setBoneMineralDensityTestDate(dsdneonatalvisits.getBoneMineralDensityTestDate());
+		                dbInstance.setBoneMineralDensityTestResult(dsdneonatalvisits.getBoneMineralDensityTestResult());
+		                dbInstance.setBoneMineralDensityTestResultNote(dsdneonatalvisits.getBoneMineralDensityTestResultNote());
+		                dbInstance.setMaleGenitalStage(dsdneonatalvisits.getMaleGenitalStage());
+		                dbInstance.setMalePubicHairStage(dsdneonatalvisits.getMalePubicHairStage());
+		                dbInstance.setMaleAxillaryHairStage(dsdneonatalvisits.getMaleAxillaryHairStage());
+		                dbInstance.setTesticularVolumeLeft(dsdneonatalvisits.getTesticularVolumeLeft());
+		                dbInstance.setTesticularVolumeRight(dsdneonatalvisits.getTesticularVolumeRight());
+		                dbInstance.setTesticularTexture(dsdneonatalvisits.getTesticularTexture());
+		                dbInstance.setEvidenceOfTart(dsdneonatalvisits.getEvidenceOfTart());
+		                dbInstance.setEvidenceOfTartNote(dsdneonatalvisits.getEvidenceOfTartNote());
+		                dbInstance.setMaleFertilityDesired(dsdneonatalvisits.getMaleFertilityDesired());
+		                dbInstance.setSpermStorage(dsdneonatalvisits.getSpermStorage());
+		                dbInstance.setPartnerPastPregnancyNumber(dsdneonatalvisits.getPartnerPastPregnancyNumber());
+		                dbInstance.setMaleAssistedConceptionHistory(dsdneonatalvisits.getMaleAssistedConceptionHistory());
+		                dbInstance.setMaleAssistedConceptionHistoryNote(dsdneonatalvisits.getMaleAssistedConceptionHistoryNote());
+		                dbInstance.setCahVisitNote(dsdneonatalvisits.getCahVisitNote());
+		                dbInstance.setFemaleBreastStage(dsdneonatalvisits.getFemaleBreastStage());
+		                dbInstance.setFemalePubicHairStage(dsdneonatalvisits.getFemalePubicHairStage());
+		                dbInstance.setFemaleAxillaryHairStage(dsdneonatalvisits.getFemaleAxillaryHairStage());
+		                dbInstance.setMenarche(dsdneonatalvisits.getMenarche());
+		                dbInstance.setAgeAtMenarche(dsdneonatalvisits.getAgeAtMenarche());
+		                dbInstance.setRegularMenstrualCycle(dsdneonatalvisits.getRegularMenstrualCycle());
+		                dbInstance.setFemaleFertilityDesired(dsdneonatalvisits.getFemaleFertilityDesired());
+		                dbInstance.setPastPregnancyNumber(dsdneonatalvisits.getPastPregnancyNumber());
+		                dbInstance.setLiveBirthNumber(dsdneonatalvisits.getLiveBirthNumber());
+		                dbInstance.setFemaleAssistedConceptionHistory(dsdneonatalvisits.getFemaleAssistedConceptionHistory());
+		                dbInstance.setFemaleAssistedConceptionHistoryNote(dsdneonatalvisits.getFemaleAssistedConceptionHistoryNote());
+		                dbInstance.setDsdCah(dsdCah);
+//		                dsdCah.getdsdneonatalvisitss().add(dbInstance);
+		                log.info("Found episode size = " + dsdneonatalvisits.getdsdneonatalvisitsEpisodes().size());
+		                if (CollectionUtils.isNotEmpty(dsdneonatalvisits.getdsdneonatalvisitsEpisodes())) {
+		                    for (dsdneonatalvisitsEpisode episode : dbInstance.getdsdneonatalvisitsEpisodes()) {
+		                        log.info("deleting Episode = " + episode);
+		                        this.dsdneonatalvisitsEpisodeDao.delete(episode);
+		                    }
+		                    Set<dsdneonatalvisitsEpisode> dsdneonatalvisitsEpisodeSet = new HashSet<>();
+		                    for (dsdneonatalvisitsEpisode episode : dsdneonatalvisits.getdsdneonatalvisitsEpisodes()) {
+		                        log.info("Episode = " + episode);
+		                        episode.setdsdneonatalvisits(dbInstance);
+		                        dsdneonatalvisitsEpisodeSet.add(episode);
+		                    }
+		                    dbInstance.setdsdneonatalvisitsEpisodes(dsdneonatalvisitsEpisodeSet);
+		                }
+		                log.info("Found med size = " + dsdneonatalvisits.getdsdneonatalvisitsMedDetails().size());
+		                if (CollectionUtils.isNotEmpty(dsdneonatalvisits.getdsdneonatalvisitsMedDetails())) {
+		                    for (dsdneonatalvisitsMedDetail detail : dbInstance.getdsdneonatalvisitsMedDetails()) {
+		                        log.info("deleting Med Detail = " + detail);
+		                        this.dsdneonatalvisitsMedDetailDao.delete(detail);
+		                    }
+		                    Set<dsdneonatalvisitsMedDetail> dsdneonatalvisitsMedDetailSet = new HashSet<>();
+		                    for (dsdneonatalvisitsMedDetail detail : dsdneonatalvisits.getdsdneonatalvisitsMedDetails()) {
+		                        log.info("detail = " + detail);
+		                        detail.setdsdneonatalvisits(dbInstance);
+		                        dsdneonatalvisitsMedDetailSet.add(detail);
+		                    }
+		                    dbInstance.setdsdneonatalvisitsMedDetails(dsdneonatalvisitsMedDetailSet);
+		                }
+		                this.dsdneonatalvisitsDao.attachDirty(dbInstance);
+		                dbDsdIdentifier.setUploadTime(new Timestamp(System.currentTimeMillis()));
+		                this.dsdIdentifierDao.attachDirty(dbDsdIdentifier);
+		                this.auditService.logUpdateCahVisit(dbInstance);
+		                log.info("Saving CAH Visit, after save, weight from DB = " + dbInstance.getWeight());
+		                log.info("Saving CAH Visit, after save, height from DB = " + dbInstance.getHeight());
+		            } else if (dsdneonatalvisits != null) {
+		                log.info("Creating a new CAH visit");
+		                if (CollectionUtils.isNotEmpty(dsdneonatalvisits.getdsdneonatalvisitsEpisodes())) {
+		                    for (dsdneonatalvisitsEpisode episode : dsdneonatalvisits.getdsdneonatalvisitsEpisodes()) {
+		                        episode.setdsdneonatalvisits(dsdneonatalvisits);
+		                    }
+		                }
+		                if (CollectionUtils.isNotEmpty(dsdneonatalvisits.getdsdneonatalvisitsMedDetails())) {
+		                    for (dsdneonatalvisitsMedDetail detail : dsdneonatalvisits.getdsdneonatalvisitsMedDetails()) {
+		                        detail.setdsdneonatalvisits(dsdneonatalvisits);
+		                    }
+		                }
+		                Set<dsdneonatalvisits> visitSet = new HashSet<>();
+		                visitSet.add(dsdneonatalvisits);
+		                dsdneonatalvisits.setDsdCah(dsdCah);
+		                dsdCah.setdsdneonatalvisitss(visitSet);
+		                dsdneonatalvisitsDao.save(dsdneonatalvisits);
+		                this.auditService.logCreateCahVisit(dsdneonatalvisits);
+		            }
+		        } catch (Exception e) {
+		            throw new ServiceException("Error occurred while saving DSD record into database.", e);
+		        }
+		        return dsdneonatalvisits;
+		    }
+
+				
+	}
+
+
